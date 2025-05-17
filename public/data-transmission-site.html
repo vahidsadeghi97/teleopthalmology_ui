@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>RETINEX Data Transmission Site</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #d3d3d3;
+      color: #333;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+    header {
+      background: linear-gradient(to right, #000, #4a90e2);
+      color: white;
+      padding: 10px 20px;
+      text-align: center;
+    }
+    .header-title {
+      font-size: 1.2em;
+    }
+    .content {
+      flex: 1;
+      display: flex;
+      justify-content: flex-start;
+      align-items: center;
+      background: url('/eye4.jpg') no-repeat center center;
+      background-size: cover;
+      padding: 20px;
+    }
+    .left-column {
+      max-width: 300px;
+      text-align: left;
+      padding-left: 20px;
+    }
+    .left-column .branding {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+    .left-column .branding img {
+      margin-bottom: 10px;
+    }
+    .left-column h2 {
+      font-size: 1.5em;
+      margin-bottom: 20px;
+      color: #333;
+    }
+    .left-column .instructions {
+      font-size: 0.9em;
+      margin-bottom: 20px;
+    }
+    .login-box {
+      background: rgba(255, 255, 255, 0.9);
+      padding: 20px;
+      border-radius: 5px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      text-align: left;
+    }
+    .login-box label {
+      display: block;
+      margin: 10px 0 5px;
+      text-align: left;
+    }
+    .login-box input {
+      width: 200px;
+      padding: 5px;
+      margin-bottom: 10px;
+      border: 1px solid #ccc;
+      border-radius: 3px;
+    }
+    .login-box button {
+      background-color: #4a90e2;
+      color: white;
+      padding: 5px 10px;
+      border: none;
+      border-radius: 3px;
+      margin-right: 10px;
+      cursor: pointer;
+    }
+    .login-box button:hover {
+      background-color: #357abd;
+    }
+    .login-box a {
+      display: block;
+      margin-top: 10px;
+      color: #4a90e2;
+      text-decoration: none;
+    }
+    .login-box a:hover {
+      text-decoration: underline;
+    }
+    #upload-section {
+      display: none;
+      margin-top: 20px;
+    }
+    #error-message {
+      color: red;
+      margin-top: 10px;
+      display: none;
+    }
+    #success-message {
+      color: green;
+      margin-top: 10px;
+      display: none;
+    }
+    footer {
+      background-color: #666;
+      color: white;
+      text-align: center;
+      padding: 10px;
+      font-size: 0.8em;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="header-title">The RETINEX Reading Center</div>
+  </header>
+  <div class="content">
+    <div class="left-column">
+      <div class="branding">
+        <img src="/logo.png" alt="Novin Salamat Pars Incorporation Logo" width="135" height="135">
+        <span>Novin Salamat Pars Incorporation</span>
+      </div>
+      <h2>Log in a registered user</h2>
+      <div class="instructions">
+        <strong>How to login</strong><br>
+        If you are a registered user enter your user name and password and click on the Login button.
+      </div>
+      <div class="login-box">
+        <form id="login-form">
+          <label>User:</label>
+          <input type="text" name="username" required>
+          <label>Password:</label>
+          <input type="password" name="password" required>
+          <button type="submit">Login</button>
+          <button type="reset">Reset</button>
+        </form>
+        <div id="error-message"></div>
+        <a href="#">Forgotten Password</a>
+      </div>
+      <div id="upload-section" class="login-box">
+        <h3>Upload Images</h3>
+        <form id="upload-form" enctype="multipart/form-data">
+          <label for="images">Select Images:</label>
+          <input type="file" id="images" name="images" accept="image/*" multiple required>
+          <button type="submit">Upload</button>
+        </form>
+        <div id="success-message"></div>
+      </div>
+    </div>
+  </div>
+  <footer>
+    For technical support please email The RETINEX Reading Center (support@retinax.com)<br>
+    Version: 2.34.1-production
+  </footer>
+
+  <script>
+    const loginForm = document.getElementById('login-form');
+    const uploadSection = document.getElementById('upload-section');
+    const uploadForm = document.getElementById('upload-form');
+    const errorMessage = document.getElementById('error-message');
+    const successMessage = document.getElementById('success-message');
+
+    // Handle login form submission
+    loginForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const username = loginForm.querySelector('input[name="username"]').value;
+      const password = loginForm.querySelector('input[name="password"]').value;
+
+      try {
+        const response = await fetch('http://localhost:3000/api/login', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ username, password })
+        });
+        const result = await response.json();
+
+        if (result.success) {
+          loginForm.style.display = 'none';
+          uploadSection.style.display = 'block';
+          errorMessage.style.display = 'none';
+        } else {
+          errorMessage.textContent = result.message;
+          errorMessage.style.display = 'block';
+        }
+      } catch (error) {
+        errorMessage.textContent = 'Error connecting to the server. Please try again.';
+        errorMessage.style.display = 'block';
+      }
+    });
+
+    // Handle image upload form submission
+    uploadForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const formData = new FormData(uploadForm);
+
+      try {
+        const response = await fetch('http://localhost:3000/api/upload', {
+          method: 'POST',
+          body: formData
+        });
+        const result = await response.json();
+
+        if (result.success) {
+          successMessage.textContent = result.message;
+          successMessage.style.display = 'block';
+          uploadForm.reset();
+        } else {
+          successMessage.textContent = result.message;
+          successMessage.style.display = 'block';
+        }
+      } catch (error) {
+        successMessage.textContent = 'Error uploading images. Please try again.';
+        successMessage.style.display = 'block';
+      }
+    });
+  </script>
+</body>
+</html>

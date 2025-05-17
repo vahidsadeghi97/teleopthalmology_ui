@@ -1,87 +1,173 @@
 <template>
   <div class="canvas-editor">
-    <div class="controls">
-      <div class="input-group">
+    <div class="editor-header">
+      <div class="header-content">
+        <div class="input-group">
+          <input
+            type="text"
+            v-model="imageUrl"
+            placeholder="Enter image URL"
+            @keyup.enter="loadImage"
+          />
+          <button @click="loadImage" class="primary-btn">
+            <i class="fas fa-image"></i> Load Image
+          </button>
+          <select v-model="selectedDisease" class="disease-select">
+            <option value="" disabled>Select Disease</option>
+            <option v-for="disease in diseases" :value="disease" :key="disease">{{ disease }}</option>
+          </select>
+        </div>
+        <div class="action-buttons">
+          <button @click="uploadImage" :disabled="isUploading" class="action-btn upload-btn">
+            <i class="fas fa-upload"></i>
+            {{ isUploading ? 'Uploading...' : 'Upload Image' }}
+          </button>
+          <button @click="clearCanvas" class="action-btn clear-btn">
+            <i class="fas fa-trash-alt"></i> Clear Canvas
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div class="editor-main">
+      <div class="controls">
+        <div class="tool-sections">
+          <!-- Drawing Tools Section -->
+          <div class="tool-section">
+            <h3 class="section-title">
+              <i class="fas fa-pencil-alt"></i> Drawing Tools
+            </h3>
+            <div class="tool-buttons">
+              <button @click="addText" class="tool-btn">
+                <i class="fas fa-font"></i> Add Text
+              </button>
+              <!-- <button @click="addRectangle" class="tool-btn">
+                <i class="fas fa-square"></i> Rectangle
+              </button> -->
+              <button @click="addCircle" class="tool-btn">
+                <i class="fas fa-circle"></i> Circle
+              </button>
+              <button @click="addArrow" class="tool-btn">
+                <i class="fas fa-arrow-right"></i> Arrow
+              </button>
+              <!-- <button @click="startPolygonDrawing" class="tool-btn">
+                <i class="fas fa-draw-polygon"></i> Polygon
+              </button> -->
+              <button @click="toggleFreeDrawing" class="tool-btn">
+                <i class="fas fa-pencil-alt"></i> Free Draw
+              </button>
+              <!-- <button @click="addAsterisk" class="tool-btn">
+                <i class="fas fa-asterisk"></i> Asterisk
+              </button> -->
+            </div>
+          </div>
+
+          <!-- Measurement Tools Section -->
+          <div class="tool-section">
+            <h3 class="section-title">
+              <i class="fas fa-ruler-combined"></i> Measurement Tools
+            </h3>
+            <div class="tool-buttons">
+              <button @click="startMeasuring" class="tool-btn">
+                <i class="fas fa-ruler"></i> Measure
+              </button>
+              <button @click="startAngleMeasurement" class="tool-btn">
+                <i class="fas fa-angle-right"></i> Measure Angle
+              </button>
+              <button @click="startHighlighting" class="tool-btn">
+                <i class="fas fa-highlighter"></i> Highlight
+              </button>
+            </div>
+          </div>
+
+          <!-- Image Adjustment Tools Section -->
+          <div class="tool-section">
+            <h3 class="section-title">
+              <i class="fas fa-sliders-h"></i> Image Adjustments
+            </h3>
+            <div class="tool-buttons">
+              <button @click="toggleBrightnessSlider" class="tool-btn">
+                <i class="fas fa-sun"></i> Brightness
+              </button>
+              <button @click="toggleContrastSlider" class="tool-btn">
+                <i class="fas fa-adjust"></i> Contrast
+              </button>
+              <!-- <button @click="rotateImage" class="tool-btn">
+                <i class="fas fa-redo"></i> Rotate
+              </button> -->
+              <button @click="sharpenImage" class="tool-btn">
+                <i class="fas fa-cut"></i> Sharpen
+              </button>
+              <!-- <button @click="smoothImage" class="tool-btn">
+                <i class="fas fa-blur"></i> Smooth
+              </button> -->
+              <button @click="applyEdgeDetection" class="tool-btn">
+                <i class="fas fa-border-all"></i> Edge Detection
+              </button>
+            </div>
+          </div>
+
+          <!-- View Controls Section -->
+          <div class="tool-section">
+            <h3 class="section-title">
+              <i class="fas fa-search"></i> View Controls
+            </h3>
+            <div class="tool-buttons">
+              <button @click="zoomIn" class="tool-btn">
+                <i class="fas fa-search-plus"></i> Zoom In
+              </button>
+              <button @click="zoomOut" class="tool-btn">
+                <i class="fas fa-search-minus"></i> Zoom Out
+              </button>
+              <button @click="resetZoom" class="tool-btn">
+                <i class="fas fa-compress-arrows-alt"></i> Reset Zoom
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <div v-if="showHighlightControls" class="highlight-controls">
+          <label>Highlight Color:</label>
+          <input type="color" v-model="highlightColor" @input="updateHighlightBrush" />
+          <label>Highlight Thickness:</label>
+          <input
+            type="range"
+            v-model.number="highlightThickness"
+            min="1"
+            max="50"
+            step="1"
+            @input="updateHighlightBrush"
+          />
+          <span>{{ highlightThickness }} px</span>
+        </div>
+      </div>
+
+      <div class="canvas-container" ref="canvasContainer">
+        <canvas id="fundus-canvas"></canvas>
+        <div v-if="measurementText" class="measurement-display">
+          {{ measurementText }}
+        </div>
         <input
-          type="text"
-          v-model="imageUrl"
-          placeholder="Enter image URL"
-          @keyup.enter="loadImage"
+          v-if="showBrightnessSlider"
+          type="range"
+          v-model.number="brightnessLevel"
+          min="-0.5"
+          max="0.5"
+          step="0.01"
+          class="brightness-slider"
+          @input="updateFilters"
         />
-        <button @click="loadImage">Load Image</button>
-      <select v-model="selectedDisease">
-        <option value="" disabled>Select Disease</option>
-        <option v-for="disease in diseases" :value="disease" :key="disease">{{ disease }}</option>
-        </select>
+        <input
+          v-if="showContrastSlider"
+          type="range"
+          v-model.number="contrastLevel"
+          min="-0.5"
+          max="0.5"
+          step="0.01"
+          class="contrast-slider"
+          @input="updateFilters"
+        />
       </div>
-
-      <div class="tool-buttons">
-        <button @click="addText">Add Text</button>
-        <button @click="addRectangle">Add Rectangle</button>
-        <button @click="addCircle">Add Circle</button>
-        <button @click="addArrow">Add Arrow</button>
-      <button @click="startPolygonDrawing">Add Polygon</button>
-        <button @click="toggleFreeDrawing">Free Draw</button>
-        <button @click="startMeasuring">Measure</button>
-      <button @click="startAngleMeasurement">Measure Angle</button>
-      <button @click="startHighlighting">Highlight</button>
-      <button @click="addAsterisk">Asterisk</button>
-      <button @click="toggleBrightnessSlider">Change Brightness</button>
-      <button @click="toggleContrastSlider">Change Contrast</button>
-        <button @click="zoomIn">Zoom In (+)</button>
-        <button @click="zoomOut">Zoom Out (-)</button>
-        <button @click="resetZoom">Reset Zoom</button>
-      <button @click="rotateImage">Rotate</button>
-      <button @click="sharpenImage">Sharpen</button>
-      <button @click="smoothImage">Smooth</button>
-      <button @click="applyEdgeDetection">Edge Detection</button>
-      <button @click="uploadImage" :disabled="isUploading">
-        {{ isUploading ? 'Uploading...' : 'Upload Image' }}
-      </button>
-        <button @click="clearCanvas">Clear Canvas</button>
-      </div>
-
-    <div v-if="showHighlightControls" class="highlight-controls">
-      <label>Highlight Color:</label>
-      <input type="color" v-model="highlightColor" @input="updateHighlightBrush" />
-      <label>Highlight Thickness:</label>
-      <input
-        type="range"
-        v-model.number="highlightThickness"
-        min="1"
-        max="50"
-        step="1"
-        @input="updateHighlightBrush"
-      />
-      <span>{{ highlightThickness }} px</span>
-    </div>
-    </div>
-
-  <div class="canvas-container" ref="canvasContainer">
-      <canvas id="fundus-canvas"></canvas>
-      <div v-if="measurementText" class="measurement-display">
-        {{ measurementText }}
-      </div>
-    <input
-      v-if="showBrightnessSlider"
-      type="range"
-      v-model.number="brightnessLevel"
-      min="-0.5"
-      max="0.5"
-      step="0.01"
-      class="brightness-slider"
-      @input="updateFilters"
-    />
-    <input
-      v-if="showContrastSlider"
-      type="range"
-      v-model.number="contrastLevel"
-      min="-0.5"
-      max="0.5"
-      step="0.01"
-      class="contrast-slider"
-      @input="updateFilters"
-    />
     </div>
   </div>
 </template>
@@ -1067,10 +1153,75 @@ onMounted(async () => {
 .canvas-editor {
   display: flex;
   flex-direction: column;
+  height: 100vh;
+  background: linear-gradient(to bottom, #f8f9fa, #ffffff);
+}
+
+.editor-header {
+  background: #ffffff;
+  padding: 0.75rem 1rem;
+  border-bottom: 1px solid #e9ecef;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+}
+
+.header-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.input-group {
+  display: flex;
+  gap: 0.75rem;
+  align-items: center;
+  flex-wrap: wrap;
+  background: #f8f9fa;
+  padding: 0.75rem;
+  border-radius: 8px;
+  border: 1px solid #e9ecef;
+  flex: 1;
+}
+
+.action-buttons {
+  display: flex;
+  gap: 0.75rem;
+  align-items: center;
+}
+
+input[type='text'] {
+  padding: 0.5rem 0.75rem;
+  min-width: 200px;
+  border: 1px solid #e9ecef;
+  border-radius: 6px;
+  font-size: 0.9rem;
+  transition: all 0.3s ease;
+  background: #ffffff;
+}
+
+select {
+  padding: 0.5rem 0.75rem;
+  min-width: 180px;
+  border: 1px solid #e9ecef;
+  border-radius: 6px;
+  font-size: 0.9rem;
+  background: #ffffff;
+  cursor: pointer;
+}
+
+.primary-btn {
+  padding: 0.5rem 1rem;
+  font-size: 0.9rem;
+}
+
+.editor-main {
+  display: flex;
+  flex: 1;
   gap: 1rem;
   padding: 1rem;
-  height: 100vh;
-  box-sizing: border-box;
+  overflow: hidden;
 }
 
 .controls {
@@ -1078,207 +1229,260 @@ onMounted(async () => {
   flex-direction: column;
   gap: 1rem;
   padding: 1rem;
-  background: #f5f5f5;
-  border-radius: 4px;
-  flex-shrink: 0; 
+  background: #ffffff;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  flex-shrink: 0;
+  border: 1px solid #e9ecef;
+  width: 280px;
+  overflow-y: auto;
 }
 
-.input-group {
+.tool-sections {
   display: flex;
-  gap: 0.5rem;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.tool-section {
+  background: #ffffff;
+  border-radius: 8px;
+  padding: 0.75rem;
+  border: 1px solid #e9ecef;
+}
+
+.section-title {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #2c3e50;
+  margin-bottom: 0.75rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid #42b983;
+  display: flex;
   align-items: center;
-}
-
-input[type='text'] {
-  padding: 0.5rem;
-  min-width: 300px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-}
-
-select {
-  padding: 0.5rem;
-  min-width: 150px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
+  gap: 0.5rem;
 }
 
 .tool-buttons {
   display: flex;
   flex-wrap: wrap;
   gap: 0.5rem;
+  padding: 0.5rem;
+  background: #f8f9fa;
+  border-radius: 6px;
 }
 
-button {
-  padding: 0.5rem 1rem;
-  background: #4caf50;
-  color: white;
-  border: none;
-  border-radius: 4px;
+.tool-btn {
+  padding: 0.5rem 0.75rem;
+  background: #ffffff;
+  color: #2c3e50;
+  border: 1px solid #e9ecef;
+  border-radius: 6px;
   cursor: pointer;
   white-space: nowrap;
-  transition: background-color 0.2s ease;
+  transition: all 0.3s ease;
+  font-weight: 500;
+  font-size: 0.9rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  min-width: 100px;
 }
 
-button:hover {
-  background: #45a049;
+.tool-btn:hover {
+  background: #42b983;
+  color: white;
+  border-color: #42b983;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
+.action-btn {
+  padding: 0.5rem 0.75rem;
+  border-radius: 6px;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all 0.3s ease;
+  font-weight: 500;
+  font-size: 0.9rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  min-width: 120px;
+}
+
+.upload-btn {
+  background: #42b983;
+  color: white;
+  border: none;
+}
+
+.upload-btn:hover {
+  background: #3aa876;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.clear-btn {
+  background: #dc3545;
+  color: white;
+  border: none;
+}
+
+.clear-btn:hover {
+  background: #c82333;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.primary-btn {
+  background: #42b983;
+  color: white;
+  border: none;
+  padding: 0.5rem 1rem;
+  font-weight: 600;
+  font-size: 0.9rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.primary-btn:hover {
+  background: #3aa876;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Add focus styles for better accessibility */
+button:focus {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(66, 185, 131, 0.2);
+}
+
+/* Add loading state styles */
 button:disabled {
-background: #cccccc;
-color: #666666;
-cursor: not-allowed;
+  opacity: 0.7;
+  cursor: not-allowed;
+  transform: none !important;
+  box-shadow: none !important;
 }
 
 .highlight-controls {
-display: flex;
-gap: 0.5rem;
-align-items: center;
-padding: 0.5rem;
-background: #e0e0e0;
-border-radius: 4px;
+  padding: 0.75rem;
+  gap: 0.75rem;
+  border-radius: 6px;
 }
 
 .highlight-controls label {
-font-size: 0.9rem;
-color: #333;
+  font-size: 0.9rem;
 }
 
 .highlight-controls input[type='color'] {
-width: 40px;
-height: 30px;
-padding: 0;
-border: 1px solid #ccc; 
-cursor: pointer;
-border-radius: 4px;
+  width: 40px;
+  height: 32px;
 }
 
 .highlight-controls input[type='range'] {
-width: 100px;
-appearance: none; 
--webkit-appearance: none;
-background: #ddd;
-border-radius: 4px;
-outline: none;
-cursor: pointer;
-padding: 0; 
-}
-
-.highlight-controls input[type='range']::-webkit-slider-thumb {
-appearance: none;
--webkit-appearance: none;
-width: 15px;
-height: 15px;
-background: #4caf50;
-border-radius: 50%;
-cursor: pointer;
-}
-
-.highlight-controls input[type='range']::-moz-range-thumb {
-width: 15px;
-height: 15px;
-background: #4caf50;
-border-radius: 50%;
-cursor: pointer;
-border: none; 
+  width: 120px;
 }
 
 .canvas-container {
   position: relative;
   flex-grow: 1;
-  border: 1px solid #ddd;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-  overflow: auto; 
-  background-color: #e9e9e9; 
+  border: 1px solid #e9ecef;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  overflow: auto;
+  background-color: #ffffff;
+  padding: 0.75rem;
 }
 
-#fundus-canvas { 
-  display: block; 
+#fundus-canvas {
+  display: block;
+  border-radius: 8px;
 }
 
 .measurement-display {
-  position: absolute;
-  bottom: 10px;
-  left: 10px;
-  background: rgba(255, 255, 255, 0.8);
-  padding: 5px 10px;
-  border-radius: 4px;
-  font-family: monospace;
-  font-size: 0.9em;
-  z-index: 10; 
+  padding: 0.5rem 0.75rem;
+  font-size: 0.9rem;
+  border-radius: 6px;
 }
 
-.brightness-slider {
-  position: absolute;
-  top: 50%;
-  right: 30px; 
-  transform-origin: center; 
-  transform: translateY(-50%) rotate(270deg);
-  width: 150px; 
-  height: 20px; 
-  background: #f5f5f5;
-  border: 1px solid #ddd;
-  border-radius: 4px;
-  appearance: none;
-  -webkit-appearance: none;
-  outline: none;
-  cursor: pointer;
-  z-index: 20; 
-}
-
-.brightness-slider::-webkit-slider-thumb {
-  appearance: none;
-  -webkit-appearance: none;
-  width: 20px; 
-  height: 20px; 
-  background: #4caf50;
-  border-radius: 50%;
-  cursor: pointer;
-}
-
-.brightness-slider::-moz-range-thumb {
-  width: 20px;
-  height: 20px;
-  background: #4caf50;
-  border-radius: 50%;
-  cursor: pointer;
-  border: none;
-}
-
+.brightness-slider,
 .contrast-slider {
-  position: absolute;
-  top: 50%;
-  left: 10px;
-  transform-origin: center;
-  transform: translateY(-50%) rotate(270deg);
-  width: 150px;
-  height: 20px;
-  background: #f5f5f5;
-  border: 1px solid #ddd;
-  border-radius: 4px;
-  appearance: none;
-  -webkit-appearance: none;
-  outline: none;
-  cursor: pointer;
-  z-index: 20;
+  width: 160px;
 }
 
+.brightness-slider::-webkit-slider-thumb,
 .contrast-slider::-webkit-slider-thumb {
-  appearance: none;
-  -webkit-appearance: none;
   width: 20px;
   height: 20px;
-  background: #4caf50;
-  border-radius: 50%;
-  cursor: pointer;
 }
 
-.contrast-slider::-moz-range-thumb {
-  width: 20px;
-  height: 20px;
-  background: #4caf50;
-  border-radius: 50%;
-  cursor: pointer;
-  border: none;
+@media (max-width: 1024px) {
+  .editor-main {
+    flex-direction: column;
+  }
+
+  .controls {
+    width: 100%;
+    max-height: none;
+  }
+
+  .canvas-container {
+    min-height: 400px;
+  }
+
+  .header-content {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .action-buttons {
+    width: 100%;
+    justify-content: stretch;
+  }
+
+  .action-btn {
+    flex: 1;
+  }
+}
+
+@media (max-width: 768px) {
+  .editor-header {
+    padding: 0.75rem;
+  }
+
+  .editor-main {
+    padding: 0.75rem;
+  }
+
+  .header-content {
+    gap: 0.75rem;
+  }
+
+  .action-buttons {
+    flex-direction: column;
+  }
+
+  .action-btn {
+    width: 100%;
+  }
+
+  .input-group {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  input[type='text'],
+  .disease-select {
+    width: 100%;
+    min-width: 100%;
+  }
+
+  .primary-btn {
+    width: 100%;
+    justify-content: center;
+  }
 }
 </style>

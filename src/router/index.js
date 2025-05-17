@@ -9,11 +9,17 @@ import CanvasEditor from '@/views/CanvasEditor.vue'
 import NotAllowed from "@/views/DontAllow.vue"
 import AssignFIle from '@/views/AssignFIle.vue'
 import AssignedFiles from '@/views/AssignedFiles.vue'
+import Landing from '@/views/Landing.vue'
 
 const routes = [
   {
     path: '/',
-    redirect: '/files'
+    name: 'Landing',
+    component: Landing,
+    meta: { 
+      requiresAuth: false,
+      title: 'Welcome' 
+    }
   },
   {
     path: '/login',
