@@ -29,172 +29,175 @@
       </div>
     </div>
 
-    <div class="editor-main">
-      <div class="controls">
-        <div class="tool-sections">
-          <!-- Drawing Tools Section -->
-          <div class="tool-section">
-            <h3 class="section-title">
-              <i class="fas fa-pencil-alt"></i> Drawing Tools
-            </h3>
-            <div class="tool-buttons">
-              <button @click="addText" class="tool-btn">
-                <i class="fas fa-font"></i> Add Text
-              </button>
-              <!-- <button @click="addRectangle" class="tool-btn">
-                <i class="fas fa-square"></i> Rectangle
-              </button> -->
-              <button @click="addCircle" class="tool-btn">
-                <i class="fas fa-circle"></i> Circle
-              </button>
-              <button @click="addArrow" class="tool-btn">
-                <i class="fas fa-arrow-right"></i> Arrow
-              </button>
-              <!-- <button @click="startPolygonDrawing" class="tool-btn">
-                <i class="fas fa-draw-polygon"></i> Polygon
-              </button> -->
-              <button @click="toggleFreeDrawing" class="tool-btn">
-                <i class="fas fa-pencil-alt"></i> Free Draw
-              </button>
-              <!-- <button @click="addAsterisk" class="tool-btn">
-                <i class="fas fa-asterisk"></i> Asterisk
-              </button> -->
-            </div>
-          </div>
-
-          <!-- Measurement Tools Section -->
-          <div class="tool-section">
-            <h3 class="section-title">
-              <i class="fas fa-ruler-combined"></i> Measurement Tools
-            </h3>
-            <div class="tool-buttons">
-              <button @click="startMeasuring" class="tool-btn">
-                <i class="fas fa-ruler"></i> Measure
-              </button>
-              <button @click="startAngleMeasurement" class="tool-btn">
-                <i class="fas fa-angle-right"></i> Measure Angle
-              </button>
-              <button @click="startHighlighting" class="tool-btn">
-                <i class="fas fa-highlighter"></i> Highlight
-              </button>
-            </div>
-          </div>
-
-          <!-- Image Adjustment Tools Section -->
-          <div class="tool-section">
-            <h3 class="section-title">
-              <i class="fas fa-sliders-h"></i> Image Adjustments
-            </h3>
-            <div class="tool-buttons">
-              <button @click="toggleBrightnessSlider" class="tool-btn">
-                <i class="fas fa-sun"></i> Brightness
-              </button>
-              <button @click="toggleContrastSlider" class="tool-btn">
-                <i class="fas fa-adjust"></i> Contrast
-              </button>
-              <!-- <button @click="rotateImage" class="tool-btn">
-                <i class="fas fa-redo"></i> Rotate
-              </button> -->
-              <button @click="sharpenImage" class="tool-btn">
-                <i class="fas fa-cut"></i> Sharpen
-              </button>
-              <!-- <button @click="smoothImage" class="tool-btn">
-                <i class="fas fa-blur"></i> Smooth
-              </button> -->
-              <button @click="applyEdgeDetection" class="tool-btn">
-                <i class="fas fa-border-all"></i> Edge Detection
-              </button>
-            </div>
-          </div>
-
-          <!-- View Controls Section -->
-          <div class="tool-section">
-            <h3 class="section-title">
-              <i class="fas fa-search"></i> View Controls
-            </h3>
-            <div class="tool-buttons">
-              <button @click="zoomIn" class="tool-btn">
-                <i class="fas fa-search-plus"></i> Zoom In
-              </button>
-              <button @click="zoomOut" class="tool-btn">
-                <i class="fas fa-search-minus"></i> Zoom Out
-              </button>
-              <button @click="resetZoom" class="tool-btn">
-                <i class="fas fa-compress-arrows-alt"></i> Reset Zoom
-              </button>
-            </div>
-          </div>
-        </div>
-
-        <div v-if="showHighlightControls" class="highlight-controls">
-          <label>Highlight Color:</label>
-          <input type="color" v-model="highlightColor" @input="updateHighlightBrush" />
-          <label>Highlight Thickness:</label>
-          <input
-            type="range"
-            v-model.number="highlightThickness"
-            min="1"
-            max="50"
-            step="1"
-            @input="updateHighlightBrush"
-          />
-          <span>{{ highlightThickness }} px</span>
+<div class="editor-main">
+  <div class="controls">
+    <div class="tool-sections">
+      <!-- Drawing Tools Section -->
+      <div class="tool-section">
+        <h3 class="section-title">
+          <i class="fas fa-pencil-alt"></i> Drawing Tools
+        </h3>
+        <div class="tool-buttons">
+          <button @click="addText" class="tool-btn">
+            <i class="fas fa-font"></i> Add Text
+          </button>
+          <button @click="addRectangle" class="tool-btn">
+            <i class="fas fa-square"></i> Rectangle
+          </button>
+          <button @click="addCircle" class="tool-btn">
+            <i class="fas fa-circle"></i> Circle
+          </button>
+          <button @click="addArrow" class="tool-btn">
+            <i class="fas fa-arrow-right"></i> Arrow
+          </button>
+          <button @click="startPolygonDrawing" class="tool-btn">
+            <i class="fas fa-draw-polygon"></i> Polygon
+          </button>
+          <button @click="toggleFreeDrawing" class="tool-btn">
+            <i class="fas fa-pencil-alt"></i> Free Draw
+          </button>
+          <button @click="addAsterisk" class="tool-btn">
+            <i class="fas fa-asterisk"></i> Asterisk
+          </button>
         </div>
       </div>
 
-      <div class="canvas-container" ref="canvasContainer">
-        <canvas id="fundus-canvas"></canvas>
-        <div v-if="measurementText" class="measurement-display">
-          {{ measurementText }}
-        </div>
+<!-- Measurement Tools Section -->
+  <div class="tool-section">
+    <h3 class="section-title">
+      <i class="fas fa-ruler-combined"></i> Measurement Tools
+    </h3>
+    <div class="tool-buttons">
+      <button @click="startMeasuring" class="tool-btn">
+        <i class="fas fa-ruler"></i> Measure
+      </button>
+      <button @click="startAngleMeasurement" class="tool-btn">
+        <i class="fas fa-angle-right"></i> Measure Angle
+      </button>
+    </div>
+  </div>
+
+  <!-- Highlight Tools Section -->
+  <div class="tool-section">
+    <h3 class="section-title">
+      <i class="fas fa-highlighter"></i> Highlight Tools
+    </h3>
+    <div class="tool-buttons">
+      <button @click="startHighlighting" class="tool-btn">
+        <i class="fas fa-highlighter"></i> Highlight
+      </button>
+    </div>
+    <div v-if="showHighlightControls" class="highlight-controls">
+      <div>
+        <label for="highlightColorPicker">Color:</label>
+        <input id="highlightColorPicker" type="color" v-model="highlightColor" @input="updateHighlightBrush" />
+      </div>
+      <div>
+        <label for="highlightThicknessRange">Thickness:</label>
         <input
-          v-if="showBrightnessSlider"
+          id="highlightThicknessRange"
           type="range"
-          v-model.number="brightnessLevel"
-          min="-0.5"
-          max="0.5"
-          step="0.01"
-          class="brightness-slider"
-          @input="updateFilters"
+          v-model.number="highlightThickness"
+          min="1"
+          max="50"
+          step="1"
+          @input="updateHighlightBrush"
         />
-        <input
-          v-if="showContrastSlider"
-          type="range"
-          v-model.number="contrastLevel"
-          min="-0.5"
-          max="0.5"
-          step="0.01"
-          class="contrast-slider"
-          @input="updateFilters"
-        />
+        <span>{{ highlightThickness }}px</span>
       </div>
     </div>
+  </div>
+
+  <!-- Image Adjustment Tools Section -->
+  <div class="tool-section">
+    <h3 class="section-title">
+      <i class="fas fa-sliders-h"></i> Image Adjustments
+    </h3>
+    <div class="tool-buttons">
+      <button @click="toggleBrightnessSlider" class="tool-btn">
+        <i class="fas fa-sun"></i> Brightness
+      </button>
+      <button @click="toggleContrastSlider" class="tool-btn">
+        <i class="fas fa-adjust"></i> Contrast
+      </button>
+      <button @click="sharpenImage" class="tool-btn">
+        <i class="fas fa-cut"></i> Sharpen
+      </button>
+    </div>
+  </div>
+
+  <!-- View Controls Section -->
+  <div class="tool-section">
+    <h3 class="section-title">
+      <i class="fas fa-search"></i> View Controls
+    </h3>
+    <div class="tool-buttons">
+      <button @click="zoomIn" class="tool-btn">
+        <i class="fas fa-search-plus"></i> Zoom In
+      </button>
+      <button @click="zoomOut" class="tool-btn">
+        <i class="fas fa-search-minus"></i> Zoom Out
+      </button>
+      <button @click="resetZoom" class="tool-btn">
+        <i class="fas fa-compress-arrows-alt"></i> Reset Zoom
+      </button>
+    </div>
+  </div>
+</div>
+
+  </div>
+
+  <div class="canvas-container" ref="canvasContainer">
+    <canvas id="fundus-canvas"></canvas>
+    <div v-if="measurementText" class="measurement-display">
+      {{ measurementText }}
+    </div>
+    <input
+      v-if="showBrightnessSlider"
+      type="range"
+      v-model.number="brightnessLevel"
+      min="-0.5"
+      max="0.5"
+      step="0.01"
+      class="brightness-slider"
+      @input="updateFilters"
+    />
+    <input
+      v-if="showContrastSlider"
+      type="range"
+      v-model.number="contrastLevel"
+      min="-0.5"
+      max="0.5"
+      step="0.01"
+      class="contrast-slider"
+      @input="updateFilters"
+    />
+  </div>
+</div>
+
   </div>
 </template>
 
 <script>
 import * as fabric from 'fabric'
-import { onMounted, ref } from 'vue' // Removed 'watch' as it's not used
-import FileService from '@/services/file.service' // Adjust path to your FileService
+import { onMounted, ref, onUnmounted } from 'vue'
+import FileService from '@/services/file.service'
 import {useRoute} from "vue-router"
-import EditedImageService from '@/services/edited_file.service'; // Adjusted path to your service
+import EditedImageService from '@/services/edited_file.service';
 
 function convolutionFilter(fabricImageObject, kernel, divisor = 1) {
   const canvasEl = document.createElement('canvas');
   const ctx = canvasEl.getContext('2d');
-  // Use unscaled dimensions for the filter canvas
   canvasEl.width = fabricImageObject.width;
   canvasEl.height = fabricImageObject.height;
-
-  // Draw the original image element (could be an <img> or another <canvas>)
   ctx.drawImage(fabricImageObject.getElement(), 0, 0, fabricImageObject.width, fabricImageObject.height);
   const imageData = ctx.getImageData(0, 0, fabricImageObject.width, fabricImageObject.height);
   const data = imageData.data;
   const width = imageData.width;
   const height = imageData.height;
-  const tempData = new Uint8ClampedArray(data.length); // Use Uint8ClampedArray for image data
+  const tempData = new Uint8ClampedArray(data.length);
 
-  for (let y = 1; y < height - 1; y++) { // Iterate within bounds to avoid edge issues with kernel
+  for (let y = 1; y < height - 1; y++) {
     for (let x = 1; x < width - 1; x++) {
       const idx = (y * width + x) * 4;
       let r = 0, g = 0, b = 0;
@@ -210,13 +213,9 @@ function convolutionFilter(fabricImageObject, kernel, divisor = 1) {
       tempData[idx] = Math.min(Math.max(r / divisor, 0), 255);
       tempData[idx + 1] = Math.min(Math.max(g / divisor, 0), 255);
       tempData[idx + 2] = Math.min(Math.max(b / divisor, 0), 255);
-      tempData[idx + 3] = data[idx + 3]; // Preserve alpha
+      tempData[idx + 3] = data[idx + 3];
     }
   }
-  // Copy edge pixels without filtering or handle them separately if needed
-  // For simplicity, this version leaves a 1px unfiltered border.
-  // To copy full image, iterate 0 to height and 0 to width, and handle boundary conditions for kernel.
-  // Or, copy original data for border pixels.
   for (let y = 0; y < height; y++) {
     for (let x = 0; x < width; x++) {
         if (y === 0 || y === height - 1 || x === 0 || x === width - 1) {
@@ -228,102 +227,64 @@ function convolutionFilter(fabricImageObject, kernel, divisor = 1) {
         }
     }
   }
-
-
-  const newImageData = new ImageData(tempData, width, height);
-  ctx.putImageData(newImageData, 0, 0);
-  return canvasEl; // Return the canvas element with the filtered image
-}
-
-function applySobelFilter(fabricImageObject) {
-  const canvasEl = document.createElement('canvas');
-  const ctx = canvasEl.getContext('2d');
-  canvasEl.width = fabricImageObject.width;
-  canvasEl.height = fabricImageObject.height;
-
-  ctx.drawImage(fabricImageObject.getElement(), 0, 0, fabricImageObject.width, fabricImageObject.height);
-  const imageData = ctx.getImageData(0, 0, fabricImageObject.width, fabricImageObject.height);
-  const data = imageData.data;
-  const width = imageData.width;
-  const height = imageData.height;
-  const tempData = new Uint8ClampedArray(data.length);
-
-  const kernelX = [-1, 0, 1, -2, 0, 2, -1, 0, 1];
-  const kernelY = [-1, -2, -1, 0, 0, 0, 1, 2, 1];
-
-  for (let y = 1; y < height - 1; y++) {
-    for (let x = 1; x < width - 1; x++) {
-      const idx = (y * width + x) * 4;
-      let gx = 0, gy = 0;
-      for (let ky = -1; ky <= 1; ky++) {
-        for (let kx = -1; kx <= 1; kx++) {
-          const pixelIdx = ((y + ky) * width + (x + kx)) * 4;
-          // Convert to grayscale for Sobel
-          const gray = (data[pixelIdx] * 0.299 + data[pixelIdx + 1] * 0.587 + data[pixelIdx + 2] * 0.114);
-          gx += gray * kernelX[(ky + 1) * 3 + (kx + 1)];
-          gy += gray * kernelY[(ky + 1) * 3 + (kx + 1)];
-        }
-      }
-      const magnitude = Math.sqrt(gx * gx + gy * gy);
-      tempData[idx] = tempData[idx + 1] = tempData[idx + 2] = Math.min(magnitude, 255);
-      tempData[idx + 3] = data[idx + 3]; // Preserve alpha
-    }
-  }
-   for (let y = 0; y < height; y++) {
-    for (let x = 0; x < width; x++) {
-        if (y === 0 || y === height - 1 || x === 0 || x === width - 1) {
-            const idx = (y * width + x) * 4;
-            tempData[idx] = data[idx];
-            tempData[idx+1] = data[idx+1];
-            tempData[idx+2] = data[idx+2];
-            tempData[idx+3] = data[idx+3];
-        }
-    }
-  }
-
   const newImageData = new ImageData(tempData, width, height);
   ctx.putImageData(newImageData, 0, 0);
   return canvasEl;
 }
 
+
 export default {
   name: 'CanvasEditor',
   setup() {
-const route = useRoute();
-const imageUrl = ref('');
-const canvas = ref(null);
-const canvasContainer = ref(null);
-const selectedDisease = ref('');
-const measurementText = ref('');
-const isMeasuring = ref(false);
-// const isPanning = ref(false); // Not used
-const startPoint = ref(null);
-const currentMeasurement = ref(null);
-const scaleFactor = ref(1); // Intended for mm calculation, e.g., pixels per mm
-const brightnessLevel = ref(0);
-const showBrightnessSlider = ref(false);
-const contrastLevel = ref(0);
-const showContrastSlider = ref(false);
-const lastClickPos = ref({ x: null, y: null });
-const isDragging = ref(false); // Used for panning
-const lastDragPos = ref({ x: 0, y: 0 });
-const isDrawingPolygon = ref(false);
-const polygonPoints = ref([]);
-const tempLines = ref([]);
-const tempPoints = ref([]);
-const isMeasuringAngle = ref(false);
-const anglePoints = ref([]);
-const angleLines = ref([]);
-const edgeImage = ref(null); // Stores the fabric.Image object for the edge detection result
-const rotationAngle = ref(0);
-const isHighlighting = ref(false);
-const showHighlightControls = ref(false);
-const highlightColor = ref('#ffff00');
-const highlightThickness = ref(10);
-const isAddingAsterisk = ref(false);
-const originalCanvasHeight = 800;
-const isUploading = ref(false);
-const uploadError = ref('');
+    const route = useRoute();
+    const imageUrl = ref('');
+    const canvas = ref(null);
+    const canvasContainer = ref(null);
+    const selectedDisease = ref('');
+    const measurementText = ref('');
+    const isMeasuring = ref(false);
+    const startPoint = ref(null);
+    const currentMeasurement = ref(null);
+    const scaleFactor = ref(100);
+    const brightnessLevel = ref(0);
+    const showBrightnessSlider = ref(false);
+    const contrastLevel = ref(0);
+    const showContrastSlider = ref(false);
+    const lastClickPos = ref({ x: null, y: null });
+    const isDragging = ref(false);
+    const lastDragPos = ref({ x: 0, y: 0 });
+    const isDrawingPolygon = ref(false);
+    const polygonPoints = ref([]);
+    const tempLines = ref([]);
+    const tempPoints = ref([]);
+    const isMeasuringAngle = ref(false);
+    const anglePoints = ref([]);
+    const angleLines = ref([]);
+    const rotationAngle = ref(0);
+    const isHighlighting = ref(false);
+    const showHighlightControls = ref(false);
+    const highlightColor = ref('#ffff00');
+    const highlightThickness = ref(10);
+    const isAddingAsterisk = ref(false);
+    const originalCanvasHeight = 800;
+    const isUploading = ref(false);
+    const uploadError = ref('');
+    const padding = 20;
+
+    const isDrawingCircle = ref(false);
+    const currentCircle = ref(null);
+
+    const isDrawingTextRect = ref(false);
+    const textRectStartPoint = ref(null);
+    const currentTextRect = ref(null);
+    const isDrawingArrow = ref(false);
+    const arrowStartPoint = ref(null);
+    const currentArrow = ref(null);
+
+    const isDrawingRectangle = ref(false);
+    const rectStartPoint = ref(null);
+    const currentRectangle = ref(null);
+
 
   const diseases = [
     'Diabetic Retinopathy (DR)',
@@ -349,6 +310,27 @@ const diseaseToTypeMap = {
   'Macular Diseases': 'Macular_Diseases',
 };
 
+const handleDeleteKeyPress = (event) => {
+  if (!canvas.value) return;
+  const activeObject = canvas.value.getActiveObject();
+
+  if (activeObject) {
+    if (activeObject.isEditing) {
+      return;
+    }
+    if (event.key === 'Delete' || event.key === 'Backspace') {
+      event.preventDefault();
+      if (activeObject.type === 'activeSelection') {
+        activeObject.forEachObject(obj => canvas.value.remove(obj));
+      } else {
+        canvas.value.remove(activeObject);
+      }
+      canvas.value.discardActiveObject();
+      canvas.value.requestRenderAll();
+    }
+  }
+};
+
 onMounted(async () => {
       try {
           const response = await FileService.getFile(route.params.id)
@@ -366,7 +348,7 @@ onMounted(async () => {
         width: 800,
         height: originalCanvasHeight,
         preserveObjectStacking: true,
-        selection: true, // Allows selecting objects (like text, shapes)
+        selection: true,
       });
 
   canvas.value.on('mouse:down', handleMouseDown);
@@ -374,9 +356,8 @@ onMounted(async () => {
   canvas.value.on('mouse:up', handleMouseUp);
   canvas.value.on('mouse:dblclick', handleDoubleClick);
 
-    // Separate listener for lastClickPos to ensure it uses ignoreZoom=true for consistent zoom point
     canvas.value.on('mouse:down', (options) => {
-    const pointer = canvas.value.getPointer(options.e, true); // ignoreZoom = true
+    const pointer = canvas.value.getPointer(options.e, true);
     lastClickPos.value = { x: pointer.x, y: pointer.y };
   });
 
@@ -386,20 +367,26 @@ onMounted(async () => {
       }
   });
     canvas.value.on('mouse:out', (options) => {
-      if (!isDragging.value && (
-            !isMeasuring.value &&
-            !canvas.value.isDrawingMode &&
-            !isDrawingPolygon.value &&
-            !isMeasuringAngle.value &&
-            !isAddingAsterisk.value
-        )) {
+      const noActiveTool = !isMeasuring.value && !canvas.value.isDrawingMode && !isDrawingPolygon.value &&
+                           !isMeasuringAngle.value && !isAddingAsterisk.value && !isDrawingCircle.value &&
+                           !isDrawingTextRect.value && !isDrawingArrow.value && !isDrawingRectangle.value;
+
+      if (!isDragging.value && noActiveTool) {
             if (!options.target || (options.target.type === 'image' && options.target.selectable === false)) {
                  canvas.value.defaultCursor = canvas.value.getZoom() === 1 ? 'default' : 'move';
             } else {
-                canvas.value.defaultCursor = 'default'; // Cursor for selectable objects
+                canvas.value.defaultCursor = 'default';
             }
       }
   });
+  window.addEventListener('keydown', handleDeleteKeyPress);
+});
+
+onUnmounted(() => {
+  window.removeEventListener('keydown', handleDeleteKeyPress);
+  if (canvas.value) {
+    canvas.value.dispose();
+  }
 });
 
     const loadImage = () => {
@@ -413,26 +400,32 @@ onMounted(async () => {
         const fabricImg = new fabric.Image(imgElement);
         const scale = Math.min(
           (canvas.value.width / fabricImg.width) * 0.95,
-          (originalCanvasHeight / 2 / fabricImg.height) * 0.95 // Position in upper half
+          (originalCanvasHeight / 2 / fabricImg.height) * 0.95
         );
         fabricImg.set({
           scaleX: scale,
           scaleY: scale,
           left: canvas.value.width / 2,
-          top: originalCanvasHeight / 4, // Center in the top half of the initial canvas
+          top: originalCanvasHeight / 4,
           originX: 'center',
           originY: 'center',
-          selectable: false, // This is the main, non-interactive background image
-          evented: true, // Allow it to be a target for mouse events (for panning)
+          selectable: false,
+          evented: true,
           angle: 0,
         });
-        canvas.value.clear(); // Clear previous content
-        canvas.value.setDimensions({ width: 800, height: originalCanvasHeight }); // Reset canvas size
+        canvas.value.clear();
+        canvas.value.setDimensions({ width: 800, height: originalCanvasHeight });
         canvas.value.add(fabricImg);
-        edgeImage.value = null; // Reset edge image
+        fabricImg.setCoords();
+        const imgBounds = fabricImg.getBoundingRect();
+        let newCanvasHeight = imgBounds.top + imgBounds.height + padding;
+        newCanvasHeight = Math.max(newCanvasHeight, fabricImg.getScaledHeight() + 2 * padding);
+        newCanvasHeight = Math.max(newCanvasHeight, 200);
+
+        canvas.value.setHeight(newCanvasHeight);
+
         rotationAngle.value = 0;
-        resetZoom(); // Also reset zoom/pan state
-        canvas.value.renderAll();
+        resetZoom();
       };
       imgElement.onerror = () => {
         alert('Failed to load image. Please check the URL and try again.');
@@ -441,227 +434,125 @@ onMounted(async () => {
 };
 
   const sharpenImage = () => {
-    const mainImageObject = canvas.value.getObjects('image').find((img) => img.selectable === false && img !== edgeImage.value);
+    const mainImageObject = canvas.value.getObjects('image').find((img) => img.selectable === false);
     if (!mainImageObject) {
       alert('Please load an image first');
       return;
     }
-
     const sharpenKernel = [0, -1, 0, -1, 5, -1, 0, -1, 0];
     const filteredCanvasElement = convolutionFilter(mainImageObject, sharpenKernel, 1);
-    
     mainImageObject.setElement(filteredCanvasElement, { crossOrigin: 'Anonymous' });
     mainImageObject.setCoords();
-
-    if (edgeImage.value) {
-      const currentEdgeImageObject = edgeImage.value;
-      // Re-filter the *updated* main image for the edge detection
-      const newEdgeCanvasElement = applySobelFilter(mainImageObject);
-      currentEdgeImageObject.setElement(newEdgeCanvasElement, { crossOrigin: 'Anonymous' });
-      currentEdgeImageObject.setCoords();
-      // adjustCanvasHeight might be needed if content bounds change, though filters shouldn't change size
-    }
     canvas.value.renderAll();
   };
 
   const smoothImage = () => {
-    const mainImageObject = canvas.value.getObjects('image').find((img) => img.selectable === false && img !== edgeImage.value);
+    const mainImageObject = canvas.value.getObjects('image').find((img) => img.selectable === false);
     if (!mainImageObject) {
       alert('Please load an image first');
       return;
     }
-
     const smoothKernel = [1/9, 1/9, 1/9, 1/9, 1/9, 1/9, 1/9, 1/9, 1/9];
     const filteredCanvasElement = convolutionFilter(mainImageObject, smoothKernel, 1);
-
     mainImageObject.setElement(filteredCanvasElement, { crossOrigin: 'Anonymous' });
     mainImageObject.setCoords();
-    
-    if (edgeImage.value) {
-      const currentEdgeImageObject = edgeImage.value;
-      const newEdgeCanvasElement = applySobelFilter(mainImageObject); // Use updated main image
-      currentEdgeImageObject.setElement(newEdgeCanvasElement, { crossOrigin: 'Anonymous' });
-      currentEdgeImageObject.setCoords();
-    }
     canvas.value.renderAll();
   };
 
   const rotateImage = () => {
-  const originalImage = canvas.value.getObjects('image').find((img) => img.selectable === false && img !== edgeImage.value);
+  const originalImage = canvas.value.getObjects('image').find((img) => img.selectable === false);
     if (!originalImage) {
     alert('Please load an image first');
     return;
     }
-
   rotationAngle.value = (rotationAngle.value + 90) % 360;
   originalImage.set({ angle: rotationAngle.value }).setCoords();
-
-    if (edgeImage.value) {
-      edgeImage.value.set({ angle: rotationAngle.value }).setCoords();
-      // Adjust position of edgeImage relative to rotated originalImage
-      edgeImage.value.set({
-        left: originalImage.left, 
-        top: originalImage.top + originalImage.getScaledHeight()/2 + edgeImage.value.getScaledHeight()/2 + 20,
-      }).setCoords();
-    }
-  
-  // Adjust canvas size based on the new bounding box of rotated images
-  adjustCanvasHeight(originalImage, edgeImage.value); 
-  // Recenter content if canvas size changed significantly, or let user pan
-  // originalImage.center();
-  // if(edgeImage.value) edgeImage.value.center(); // Or position relative to originalImage
-
+  adjustCanvasHeight(originalImage);
   canvas.value.renderAll();
 };
 
-  const adjustCanvasHeight = (mainImg, edgeImgObj) => {
+  const adjustCanvasHeight = (mainImg) => {
     let requiredHeight = originalCanvasHeight;
     if (mainImg) {
         const mainBounds = mainImg.getBoundingRect();
         requiredHeight = Math.max(requiredHeight, mainBounds.top + mainBounds.height + 20);
-        if (edgeImgObj) {
-            // Ensure edgeImgObj is positioned relative to mainImg before getting its bounds for this calculation
-            edgeImgObj.set({
-                left: mainImg.left,
-                top: mainImg.top + mainImg.getScaledHeight()/2 + edgeImgObj.getScaledHeight()/2 + 20,
-            }).setCoords();
-            const edgeBounds = edgeImgObj.getBoundingRect();
-            requiredHeight = Math.max(requiredHeight, edgeBounds.top + edgeBounds.height + 20);
-        }
     }
     canvas.value.setDimensions({ width: canvas.value.width, height: Math.max(originalCanvasHeight, requiredHeight) });
 };
 
-  const applyEdgeDetection = () => {
-  const mainImageObject = canvas.value.getObjects('image').find((img) => img.selectable === false && img !== edgeImage.value);
-    if (!mainImageObject) {
-    alert('Please load an image first');
-    return;
-    }
-
-    if (edgeImage.value) { // If edge image exists, remove it
-    canvas.value.remove(edgeImage.value);
-    edgeImage.value = null;
-    adjustCanvasHeight(mainImageObject, null); 
-    } else { // If no edge image, create and add it
-    const edgeCanvasElement = applySobelFilter(mainImageObject);
-      const newEdgeImg = new fabric.Image(edgeCanvasElement, {
-        scaleX: mainImageObject.scaleX,
-        scaleY: mainImageObject.scaleY,
-        originX: 'center',
-        originY: 'center',
-        selectable: false,
-        evented: true, // Allow panning on it
-        angle: rotationAngle.value, // Match main image's rotation
-    });
-    canvas.value.add(newEdgeImg);
-    edgeImage.value = newEdgeImg; // Store ref to the fabric.Image object
-    // Position newEdgeImg below mainImageObject
-    adjustCanvasHeight(mainImageObject, newEdgeImg); // This will also position newEdgeImg
-    }
-  canvas.value.renderAll();
-};
-
     const addText = () => {
-  const textContent = selectedDisease.value || 'Double-click to edit';
-      const text = new fabric.IText(textContent, {
-        left: canvas.value.viewportTransform[4] + 100 / canvas.value.getZoom(), // Adjust for pan/zoom
-        top: canvas.value.viewportTransform[5] + 100 / canvas.value.getZoom(),
-        fontFamily: 'Arial',
-        fontSize: 16,
-        fill: '#ff0000',
-        backgroundColor: 'rgba(255,255,255,0.7)',
-        padding: 5,
-        hasControls: true,
-  });
-  canvas.value.add(text);
-  canvas.value.setActiveObject(text);
-  text.enterEditing();
-  selectedDisease.value = '';
-  // Reset other tool states
-  Object.assign(isAddingAsterisk, {value: false}); // and other flags...
-  canvas.value.isDrawingMode = false;
-  canvas.value.defaultCursor = canvas.value.getZoom() !== 1 ? 'move' : 'default'; // Or 'default' if an object is active
-  measurementText.value = '';
-  canvas.value.renderAll();
-};
+      if (!canvas.value.getObjects('image').find(img => img.selectable === false)) {
+        alert('Please load an image first');
+        return;
+      }
+      resetAllTools();
+      isDrawingTextRect.value = true;
+      textRectStartPoint.value = null;
+      currentTextRect.value = null;
+      canvas.value.defaultCursor = 'crosshair';
+      measurementText.value = 'Click and drag to define text area';
+    };
 
     const addRectangle = () => {
-      const rect = new fabric.Rect({
-        left: canvas.value.viewportTransform[4] + 150 / canvas.value.getZoom(),
-        top: canvas.value.viewportTransform[5] + 150 / canvas.value.getZoom(),
-        width: 100,
-        height: 60,
-        fill: 'rgba(255,0,0,0.2)',
-        stroke: '#ff0000',
-        strokeWidth: 2,
-        hasControls: true,
-  });
-  canvas.value.add(rect);
-  // Reset other tool states
-  canvas.value.isDrawingMode = false; // etc.
-  canvas.value.defaultCursor = 'default'; // Or 'move' if zoomed
-  measurementText.value = '';
-  canvas.value.renderAll();
-};
+      if (!canvas.value.getObjects('image').find(img => img.selectable === false)) {
+        alert('Please load an image first');
+        return;
+      }
+      resetAllTools();
+      isDrawingRectangle.value = true;
+      rectStartPoint.value = null;
+      currentRectangle.value = null;
+      canvas.value.defaultCursor = 'crosshair';
+      measurementText.value = 'Click to set rectangle start, drag to define size.';
+    };
+
 
     const addCircle = () => {
-      const circle = new fabric.Circle({
-        left: canvas.value.viewportTransform[4] + 150 / canvas.value.getZoom(),
-        top: canvas.value.viewportTransform[5] + 150 / canvas.value.getZoom(),
-        radius: 50,
-        fill: 'rgba(0,0,255,0.2)',
-        stroke: '#0000ff',
-        strokeWidth: 2,
-        hasControls: true,
-  });
-  canvas.value.add(circle);
-  // Reset other tool states
-  canvas.value.defaultCursor = 'default';
-  measurementText.value = '';
-  canvas.value.renderAll();
-};
+      if (!canvas.value.getObjects('image').find(img => img.selectable === false)) {
+        alert('Please load an image first');
+        return;
+      }
+      resetAllTools();
+      isDrawingCircle.value = true;
+      startPoint.value = null;
+      currentCircle.value = null;
+      canvas.value.defaultCursor = 'crosshair';
+      measurementText.value = 'Click to set circle center, drag for radius';
+    };
 
     const addArrow = () => {
-      const line = new fabric.Line([0,0, 50,0], { stroke: '#00ff00', strokeWidth: 3 });
-      const head = new fabric.Triangle({ 
-        width: 10, height: 15, fill: '#00ff00', angle: 90, 
-        left: 50, top: 0, originX: 'center', originY: 'center' 
-      });
-      const arrow = new fabric.Group([line, head], {
-        left: canvas.value.viewportTransform[4] + 75 / canvas.value.getZoom(),
-        top: canvas.value.viewportTransform[5] + 75 / canvas.value.getZoom(),
-        hasControls: true,
-        // Lock scaling X/Y, rotation if needed, or add custom controls
-      });
-  canvas.value.add(arrow);
-  // Reset tool states
-  canvas.value.defaultCursor = 'default';
-  measurementText.value = '';
-  canvas.value.renderAll();
-};
+      if (!canvas.value.getObjects('image').find(img => img.selectable === false)) {
+        alert('Please load an image first');
+        return;
+      }
+      resetAllTools();
+      isDrawingArrow.value = true;
+      arrowStartPoint.value = null;
+      currentArrow.value = null;
+      canvas.value.defaultCursor = 'crosshair';
+      measurementText.value = 'Click to set arrow tail, drag for head';
+    };
 
   const addAsterisk = () => {
-    if (!canvas.value.getObjects('image').find(img => img.selectable === false && img !== edgeImage.value)) {
+    if (!canvas.value.getObjects('image').find(img => img.selectable === false)) {
       alert('Please load an image first');
       return;
     }
-    // Deactivate other tools
-    isDrawingPolygon.value = false; canvas.value.isDrawingMode = false; isMeasuring.value = false; isMeasuringAngle.value = false; isHighlighting.value = false;
-    
+    resetAllTools();
     isAddingAsterisk.value = true;
     canvas.value.defaultCursor = 'crosshair';
     measurementText.value = 'Click to place asterisk';
-    // canvas.value.renderAll(); // Not strictly needed if only cursor changes
   };
 
-  const createAsterisk = (x, y) => { // x, y are canvas coordinates from getPointer
-    const size = 10 / canvas.value.getZoom(); // Make asterisk appear same visual size regardless of zoom
+  const createAsterisk = (x, y) => {
+    const size = 10 / canvas.value.getZoom();
+    const strokeWidth = 2 / canvas.value.getZoom(); // Scale stroke width with zoom
+
     const lines = [
-      new fabric.Line([-size, 0, size, 0], { stroke: '#ff0000', strokeWidth: 2 }),
-      new fabric.Line([0, -size, 0, size], { stroke: '#ff0000', strokeWidth: 2 }),
-      new fabric.Line([-size * 0.707, -size * 0.707, size * 0.707, size * 0.707], { stroke: '#ff0000', strokeWidth: 2 }),
-      new fabric.Line([-size * 0.707, size * 0.707, size * 0.707, -size * 0.707], { stroke: '#ff0000', strokeWidth: 2 }),
+      new fabric.Line([-size, 0, size, 0], { stroke: '#ff0000', strokeWidth: strokeWidth }),
+      new fabric.Line([0, -size, 0, size], { stroke: '#ff0000', strokeWidth: strokeWidth }),
+      new fabric.Line([-size * 0.707, -size * 0.707, size * 0.707, size * 0.707], { stroke: '#ff0000', strokeWidth: strokeWidth }),
+      new fabric.Line([-size * 0.707, size * 0.707, size * 0.707, -size * 0.707], { stroke: '#ff0000', strokeWidth: strokeWidth }),
     ];
     lines.forEach(line => line.set({ selectable: false, evented: false }));
 
@@ -670,87 +561,95 @@ onMounted(async () => {
       hasControls: true, selectable: true,
     });
     canvas.value.add(asteriskGroup);
-    isAddingAsterisk.value = false; // Reset tool
-    measurementText.value = '';
+    canvas.value.setActiveObject(asteriskGroup); // Make it active
+    isAddingAsterisk.value = false;
+    measurementText.value = 'Asterisk added. Click Asterisk to add another.';
     canvas.value.defaultCursor = canvas.value.getZoom() !== 1 ? 'move' : 'default';
     canvas.value.renderAll();
   };
 
     const toggleFreeDrawing = () => {
-      // Deactivate other tools
-      isDrawingPolygon.value = false; isAddingAsterisk.value = false; isMeasuring.value = false; isMeasuringAngle.value = false;
-      
-      canvas.value.isDrawingMode = !canvas.value.isDrawingMode;
-      if (canvas.value.isDrawingMode) {
-        isHighlighting.value = false; // Ensure highlight is off if pencil is on
-        showHighlightControls.value = false;
+      if (canvas.value.isDrawingMode && !isHighlighting.value) {
+        resetAllTools();
+      } else {
+        resetAllTools();
+        canvas.value.isDrawingMode = true;
         if (!canvas.value.freeDrawingBrush) {
           canvas.value.freeDrawingBrush = new fabric.PencilBrush(canvas.value);
         }
-        canvas.value.freeDrawingBrush.color = '#ff0000'; // Pencil color
-        canvas.value.freeDrawingBrush.width = 3;       // Pencil width
+        canvas.value.freeDrawingBrush.color = '#ff0000';
+        canvas.value.freeDrawingBrush.width = 3;
         canvas.value.defaultCursor = 'crosshair';
-        measurementText.value = 'Click and drag to draw';
-      } else {
-        canvas.value.defaultCursor = canvas.value.getZoom() !== 1 ? 'move' : 'default';
-        measurementText.value = '';
+        measurementText.value = 'Free drawing. Click button again to turn off.';
       }
     };
 
   const startPolygonDrawing = () => {
-    if (!canvas.value.getObjects('image').find(img => img.selectable === false && img !== edgeImage.value)) {
+    if (!canvas.value.getObjects('image').find(img => img.selectable === false)) {
       alert('Please load an image first'); return;
     }
-    // Deactivate other tools
-    canvas.value.isDrawingMode = false; isAddingAsterisk.value = false; isMeasuring.value = false; isMeasuringAngle.value = false; isHighlighting.value = false;
-    
+    resetAllTools();
     isDrawingPolygon.value = true;
     polygonPoints.value = [];
     tempLines.value.forEach(line => canvas.value.remove(line));
     tempPoints.value.forEach(point => canvas.value.remove(point));
     tempLines.value = []; tempPoints.value = [];
     canvas.value.defaultCursor = 'crosshair';
-    measurementText.value = 'Click to add first vertex';
+    measurementText.value = 'Polygon: Click for first vertex. Dbl-click to finish.';
   };
+
+  const calculatePolygonArea = (vertices) => {
+    let area = 0;
+    const n = vertices.length;
+    if (n < 3) return 0;
+
+    for (let i = 0; i < n; i++) {
+      const p1 = vertices[i];
+      const p2 = vertices[(i + 1) % n];
+      area += (p1.x * p2.y - p2.x * p1.y);
+    }
+    return Math.abs(area / 2.0);
+  };
+
 
   const completePolygon = () => {
     if (polygonPoints.value.length < 3) {
-      alert('A polygon requires at least 3 points'); return;
+      alert('A polygon requires at least 3 points.'); return;
     }
     if (tempLines.value.length > 0 && tempLines.value[tempLines.value.length -1].temporary) {
-        canvas.value.remove(tempLines.value.pop()); // Remove final rubber-band line
+        canvas.value.remove(tempLines.value.pop());
     }
     tempPoints.value.forEach(point => canvas.value.remove(point)); tempPoints.value = [];
-    // Solid lines added during clicks are part of the polygon, don't remove them from tempLines if they are final segments
-    // It's better if tempLines only stores the rubber-band line.
-    
+
     const finalPolygon = new fabric.Polygon(polygonPoints.value, {
-      fill: 'rgba(255,165,0,0.2)', stroke: '#ffa500', strokeWidth: 2,
+      fill: 'rgba(255,165,0,0.2)', stroke: '#ffa500', strokeWidth: 2 / canvas.value.getZoom(),
       hasControls: true, selectable: true,
     });
     canvas.value.add(finalPolygon);
+    canvas.value.setActiveObject(finalPolygon);
+
+    const areaPx = calculatePolygonArea(polygonPoints.value);
+    const pixelsPerMm = scaleFactor.value || 100;
+    const areaMmSq = (areaPx / Math.pow(pixelsPerMm, 2)).toFixed(2);
+    measurementText.value = `Polygon Area: ${areaMmSq} mm² (${areaPx.toFixed(0)} px²)`;
 
     isDrawingPolygon.value = false;
-    polygonPoints.value = []; 
-    tempLines.value.forEach(line => canvas.value.remove(line)); // Clear any remaining temp lines (e.g. segments if they were stored here)
+    polygonPoints.value = [];
     tempLines.value = [];
-    measurementText.value = '';
     canvas.value.defaultCursor = canvas.value.getZoom() !== 1 ? 'move' : 'default';
     canvas.value.renderAll();
   };
 
   const startAngleMeasurement = () => {
-    if (!canvas.value.getObjects('image').find(img => img.selectable === false && img !== edgeImage.value)) {
+    if (!canvas.value.getObjects('image').find(img => img.selectable === false)) {
       alert('Please load an image first'); return;
     }
-    // Deactivate other tools
-    canvas.value.isDrawingMode = false; isDrawingPolygon.value = false; isAddingAsterisk.value = false; isMeasuring.value = false; isHighlighting.value = false;
-
+    resetAllTools();
     isMeasuringAngle.value = true;
     anglePoints.value = [];
     angleLines.value.forEach(line => canvas.value.remove(line)); angleLines.value = [];
     canvas.value.defaultCursor = 'crosshair';
-    measurementText.value = 'Click to select first point';
+    measurementText.value = 'Angle: Click for first point.';
   };
 
   const calculateAngle = (p1, p2, p3) => {
@@ -765,40 +664,38 @@ onMounted(async () => {
     return ((Math.acos(cosTheta) * 180) / Math.PI).toFixed(2);
   };
 
-  const completeAngleMeasurement = () => { // Called after 3rd point
+  const completeAngleMeasurement = () => {
     if (anglePoints.value.length === 3) {
       const angleVal = calculateAngle(anglePoints.value[0], anglePoints.value[1], anglePoints.value[2]);
       measurementText.value = `Angle: ${angleVal}°`;
-      // Make lines non-selectable or group them with text
-      // angleLines.value.forEach(line => line.set({selectable: false, evented: false}));
     }
-    isMeasuringAngle.value = false; // Reset tool state
-    // anglePoints & angleLines are kept for visual display, cleared on tool re-activation.
+    isMeasuringAngle.value = false;
     canvas.value.defaultCursor = canvas.value.getZoom() !== 1 ? 'move' : 'default';
     canvas.value.renderAll();
   };
 
   const startHighlighting = () => {
-    if (!canvas.value.getObjects('image').find(img => img.selectable === false && img !== edgeImage.value)) {
+    if (!canvas.value.getObjects('image').find(img => img.selectable === false)) {
       alert('Please load an image first'); return;
     }
-    // Deactivate other tools
-    isDrawingPolygon.value = false; isAddingAsterisk.value = false; isMeasuring.value = false; isMeasuringAngle.value = false;
-    
-    isHighlighting.value = true;
-    showHighlightControls.value = true;
-    canvas.value.isDrawingMode = true;
-    if (!canvas.value.freeDrawingBrush) {
-      canvas.value.freeDrawingBrush = new fabric.PencilBrush(canvas.value);
+    if (isHighlighting.value) {
+      resetAllTools();
+    } else {
+      resetAllTools();
+      isHighlighting.value = true;
+      showHighlightControls.value = true;
+      canvas.value.isDrawingMode = true;
+      if (!canvas.value.freeDrawingBrush) {
+        canvas.value.freeDrawingBrush = new fabric.PencilBrush(canvas.value);
+      }
+      updateHighlightBrush();
+      canvas.value.defaultCursor = 'crosshair';
+      measurementText.value = 'Highlighting. Click button again to turn off.';
     }
-    updateHighlightBrush(); // Set color and width
-    canvas.value.defaultCursor = 'crosshair';
-    measurementText.value = 'Click and drag to highlight';
   };
 
   const updateHighlightBrush = () => {
     if (canvas.value && canvas.value.freeDrawingBrush) {
-      // Only apply if highlighting is active and in drawing mode
       if (isHighlighting.value && canvas.value.isDrawingMode) {
         canvas.value.freeDrawingBrush.color = hexToRgba(highlightColor.value, 0.3);
         canvas.value.freeDrawingBrush.width = highlightThickness.value;
@@ -819,18 +716,42 @@ onMounted(async () => {
     isDrawingPolygon.value = false;
     isMeasuringAngle.value = false;
     isHighlighting.value = false;
-    isAddingAsterisk.value = false;
-    
     showHighlightControls.value = false;
-    // Clear temporary drawing aids
-    tempLines.value.forEach(line => canvas.value.remove(line));
-    tempPoints.value.forEach(point => canvas.value.remove(point));
-    tempLines.value = [];
-    tempPoints.value = [];
-    // Angle lines might be considered persistent annotations until cleared or tool reactivated
-    // angleLines.value.forEach(line => canvas.value.remove(line));
-    // angleLines.value = [];
-    // anglePoints.value = [];
+    isAddingAsterisk.value = false;
+    isDrawingCircle.value = false;
+    isDrawingTextRect.value = false;
+    isDrawingArrow.value = false;
+    isDrawingRectangle.value = false;
+
+    if (currentCircle.value && !currentCircle.value.hasControls) {
+        canvas.value.remove(currentCircle.value);
+    }
+    currentCircle.value = null;
+
+    if (currentTextRect.value) {
+        canvas.value.remove(currentTextRect.value);
+    }
+    currentTextRect.value = null;
+    textRectStartPoint.value = null;
+
+    if (currentArrow.value && !currentArrow.value.hasControls) {
+        canvas.value.remove(currentArrow.value);
+    }
+    currentArrow.value = null;
+    arrowStartPoint.value = null;
+
+    if (currentRectangle.value && !currentRectangle.value.hasControls) {
+        canvas.value.remove(currentRectangle.value);
+    }
+    currentRectangle.value = null;
+    rectStartPoint.value = null;
+
+    startPoint.value = null;
+
+    tempLines.value.forEach(line => canvas.value.remove(line)); tempLines.value = [];
+    tempPoints.value.forEach(point => canvas.value.remove(point)); tempPoints.value = [];
+    polygonPoints.value = [];
+    anglePoints.value = [];
 
     measurementText.value = '';
     canvas.value.defaultCursor = canvas.value.getZoom() !== 1 ? 'move' : 'default';
@@ -838,7 +759,7 @@ onMounted(async () => {
 
 
   const toggleBrightnessSlider = () => {
-    if (!canvas.value.getObjects('image').find(img => img.selectable === false && img !== edgeImage.value)) {
+    if (!canvas.value.getObjects('image').find(img => img.selectable === false)) {
       alert('Please load an image first'); return;
     }
     resetAllTools();
@@ -848,7 +769,7 @@ onMounted(async () => {
   };
 
   const toggleContrastSlider = () => {
-     if (!canvas.value.getObjects('image').find(img => img.selectable === false && img !== edgeImage.value)) {
+     if (!canvas.value.getObjects('image').find(img => img.selectable === false)) {
       alert('Please load an image first'); return;
     }
     resetAllTools();
@@ -864,96 +785,203 @@ onMounted(async () => {
     canvasContainer.value.style.filter = `${brightness} ${contrast}`;
   };
 
-    const startMeasuring = () => {
-    if (!canvas.value.getObjects('image').find(img => img.selectable === false && img !== edgeImage.value)) {
+  const startMeasuring = () => {
+    if (!canvas.value.getObjects('image').find(img => img.selectable === false)) {
       alert('Please load an image first'); return;
     }
-    // Deactivate other tools
-    canvas.value.isDrawingMode = false; isDrawingPolygon.value = false; isAddingAsterisk.value = false; isMeasuringAngle.value = false; isHighlighting.value = false;
-
+    resetAllTools();
+    startPoint.value = null;
+    if (currentMeasurement.value) canvas.value.remove(currentMeasurement.value);
+    currentMeasurement.value = null;
     isMeasuring.value = true;
-    measurementText.value = 'Click and drag to measure';
+    measurementText.value = 'Measure: Click for first point.';
     canvas.value.defaultCursor = 'crosshair';
   };
 
-    const endMeasuring = () => { // Called on mouseup when isMeasuring is true
-      isMeasuring.value = false;
-      // measurementText is kept from last mousemove
-      canvas.value.defaultCursor = canvas.value.getZoom() !== 1 ? 'move' : 'default';
-      if (currentMeasurement.value) {
-        currentMeasurement.value.set({ evented: false }); // Make the line non-interactive
-        // currentMeasurement.value = null; // Keep the ref if you want to delete it later, or clear it
-      }
-      // startPoint.value = null; // Clear start point
-    };
+  const endMeasuring = () => {
+    if (currentMeasurement.value) {
+      currentMeasurement.value.set({ evented: false });
+    }
+    isMeasuring.value = false;
+    startPoint.value = null;
+    canvas.value.defaultCursor = canvas.value.getZoom() !== 1 ? 'move' : 'default';
+  };
 
     const calculateDistance = (p1, p2) => {
-      const dx = p2.x - p1.x; // These are canvas coordinates
-      const dy = p2.y - p1.y;
-      const pixels = Math.sqrt(dx * dx + dy * dy);
-      // scaleFactor needs calibration by user or based on image metadata (e.g. DPI)
-      // Example: 1mm = scaleFactor.value pixels
-      const mm = (pixels / (scaleFactor.value || 100)).toFixed(2); // Default: 100 pixels = 1mm
-      return { pixels, mm };
+      const dx_canvas = p2.x - p1.x;
+      const dy_canvas = p2.y - p1.y;
+      const pixels_canvas = Math.sqrt(dx_canvas * dx_canvas + dy_canvas * dy_canvas);
+      const pixelsPerMm = scaleFactor.value || 100;
+      const mm = (pixels_canvas / pixelsPerMm).toFixed(2);
+      return { pixels: pixels_canvas, mm };
     };
 
     const zoomIn = () => {
-      const newZoom = canvas.value.getZoom() * 1.2;
+      const zoom = canvas.value.getZoom();
+      const newZoom = zoom * 1.2;
       const point = new fabric.Point(lastClickPos.value.x, lastClickPos.value.y);
       canvas.value.zoomToPoint(point, Math.min(10, newZoom));
-      canvas.value.defaultCursor = 'move'; // When zoomed, default to move
+      canvas.value.defaultCursor = 'move';
     };
 
     const zoomOut = () => {
-      const newZoom = canvas.value.getZoom() * 0.8;
+      const zoom = canvas.value.getZoom();
+      const newZoom = zoom * 0.8;
       const point = new fabric.Point(lastClickPos.value.x, lastClickPos.value.y);
       canvas.value.zoomToPoint(point, Math.max(0.1, newZoom));
       canvas.value.defaultCursor = canvas.value.getZoom() !== 1 ? 'move' : 'default';
     };
 
-    // adjustZoom is not directly used, zoomIn/Out use zoomToPoint
 
     const resetZoom = () => {
       canvas.value.setViewportTransform([1, 0, 0, 1, 0, 0]);
       canvas.value.setZoom(1);
-      resetAllTools(); // Also resets cursors and tool states
+      canvas.value.defaultCursor = 'default';
       canvas.value.renderAll();
     };
 
+    const createArrowGroup = (fromX, fromY, toX, toY, isFinal = false) => {
+        const angleRad = Math.atan2(toY - fromY, toX - fromX);
+        const totalLength = Math.sqrt(Math.pow(toX - fromX, 2) + Math.pow(toY - fromY, 2));
+
+        if (totalLength < 1 / canvas.value.getZoom()) {
+            return null;
+        }
+
+        const headWidth = 10 / canvas.value.getZoom();
+        const headLength = 15 / canvas.value.getZoom();
+        const linePartLength = Math.max(0, totalLength - headLength); // Ensure line part is not negative
+
+        const line = new fabric.Line([0, 0, linePartLength, 0], {
+            stroke: '#00ff00',
+            strokeWidth: 3 / canvas.value.getZoom(),
+            originX: 'left',
+            originY: 'center',
+            selectable: false, // Individual parts not selectable
+            evented: false,
+        });
+
+        const head = new fabric.Triangle({
+            width: headWidth,
+            height: headLength,
+            fill: '#00ff00',
+            angle: 90, // Triangle is typically drawn pointing up, rotate 90 to point right
+            originX: 'center', // Set origin to center for easier positioning relative to its own geometry
+            originY: 'center',
+            left: linePartLength + headLength / 2, // Position center of triangle so its tip aligns with totalLength
+            top: 0, // Align with line's y-axis
+            selectable: false,
+            evented: false,
+        });
+
+        const arrowGroup = new fabric.Group([line, head], {
+            left: fromX,
+            top: fromY,
+            angle: fabric.util.radiansToDegrees(angleRad),
+            hasControls: isFinal,
+            selectable: isFinal,
+            evented: isFinal,
+            originX: 'left', // Group's origin is at the tail of the arrow
+            originY: 'center',
+        });
+        return arrowGroup;
+    };
+
+
   const handleMouseDown = (options) => {
-    const pointer = canvas.value.getPointer(options.e); // Coordinates relative to canvas, subject to zoom/pan
-    // Note: lastClickPos is set by a separate 'mouse:down' listener with ignoreZoom=true, for zoom centering.
-    // For drawing operations, 'pointer' (affected by zoom) is generally what's needed.
+    const pointer = canvas.value.getPointer(options.e);
+
+    if (isDrawingRectangle.value) {
+      if (!rectStartPoint.value) {
+        rectStartPoint.value = pointer;
+        currentRectangle.value = new fabric.Rect({
+          left: pointer.x, top: pointer.y,
+          width: 1 / canvas.value.getZoom(), height: 1 / canvas.value.getZoom(),
+          fill: 'rgba(255,0,0,0.1)', stroke: '#ff0000',
+          strokeDashArray: [5 / canvas.value.getZoom(), 5 / canvas.value.getZoom()],
+          strokeWidth: 1 / canvas.value.getZoom(),
+          selectable: false, evented: false,
+        });
+        canvas.value.add(currentRectangle.value);
+        measurementText.value = 'Rectangle: Drag to define size, release to draw.';
+      }
+      canvas.value.renderAll();
+      return;
+    }
+
+
+    if (isDrawingTextRect.value) {
+      if (!textRectStartPoint.value) {
+        textRectStartPoint.value = pointer;
+        currentTextRect.value = new fabric.Rect({
+          left: pointer.x, top: pointer.y,
+          width: 1 / canvas.value.getZoom(), height: 1 / canvas.value.getZoom(),
+          fill: 'rgba(255,0,0,0.1)', stroke: '#ff0000', strokeDashArray: [5,5],
+          strokeWidth: 1 / canvas.value.getZoom(),
+          selectable: false, evented: false,
+        });
+        canvas.value.add(currentTextRect.value);
+        measurementText.value = 'Text: Drag to define area, release to add text.';
+      }
+      canvas.value.renderAll();
+      return;
+    }
+
+    if (isDrawingArrow.value) {
+        if (!arrowStartPoint.value) {
+            arrowStartPoint.value = pointer;
+            measurementText.value = 'Arrow: Drag to set head, release to draw.';
+        }
+        return;
+    }
+
+    if (isDrawingCircle.value) {
+      if (!startPoint.value) {
+        startPoint.value = pointer;
+        currentCircle.value = new fabric.Circle({
+          left: pointer.x, top: pointer.y,
+          radius: 1 / canvas.value.getZoom(),
+          fill: 'rgba(0,0,255,0.2)', stroke: '#0000ff',
+          strokeWidth: 2 / canvas.value.getZoom(),
+          originX: 'center', originY: 'center',
+          selectable: false, evented: false, hasControls: false,
+        });
+        canvas.value.add(currentCircle.value);
+        measurementText.value = 'Circle: Drag to set radius, release to draw.';
+      }
+      canvas.value.renderAll();
+      return;
+    }
 
     if (isAddingAsterisk.value) {
-      createAsterisk(pointer.x, pointer.y); // createAsterisk will reset its state
-      return; // Prevent other actions
+      createAsterisk(pointer.x, pointer.y);
+      return;
     }
 
     if (isDrawingPolygon.value) {
       polygonPoints.value.push({ x: pointer.x, y: pointer.y });
-      const circle = new fabric.Circle({
+      const vertexMarker = new fabric.Circle({
           left: pointer.x, top: pointer.y, radius: 3 / canvas.value.getZoom(), fill: '#ffa500',
-          stroke: '#000', strokeWidth: 1 / canvas.value.getZoom(), originX: 'center', originY: 'center',
+          stroke: '#000', strokeWidth: 1 / canvas.value.getZoom(),
+          originX: 'center', originY: 'center',
           selectable: false, evented: false
       });
-      canvas.value.add(circle);
-      tempPoints.value.push(circle);
+      canvas.value.add(vertexMarker);
+      tempPoints.value.push(vertexMarker);
 
       if (polygonPoints.value.length > 1) {
           const prevPoint = polygonPoints.value[polygonPoints.value.length - 2];
-          // Remove previous rubber-band line
           if (tempLines.value.length > 0 && tempLines.value[tempLines.value.length - 1].temporary) {
               canvas.value.remove(tempLines.value.pop());
           }
-          // Add segment line (this is permanent part of polygon being drawn)
           const segmentLine = new fabric.Line([prevPoint.x, prevPoint.y, pointer.x, pointer.y], {
-              stroke: '#ffa500', strokeWidth: 2 / canvas.value.getZoom(), selectable: false, evented: false
+              stroke: '#ffa500', strokeWidth: 2 / canvas.value.getZoom(),
+              selectable: false, evented: false
           });
           canvas.value.add(segmentLine);
-          tempLines.value.push(segmentLine); // Storing drawn segments, might want to differentiate from rubber-band
+          tempLines.value.push(segmentLine);
       }
-      measurementText.value = polygonPoints.value.length === 1 ? 'Click to add 2nd vertex' : 'Click for next, Dbl-click to finish';
+      measurementText.value = `Polygon: Vertex ${polygonPoints.value.length}. Click for next, Dbl-click to finish.`;
       canvas.value.renderAll();
       return;
     }
@@ -961,36 +989,53 @@ onMounted(async () => {
     if (isMeasuringAngle.value) {
       anglePoints.value.push({ x: pointer.x, y: pointer.y });
       if (anglePoints.value.length === 1) {
-          measurementText.value = 'Click for 2nd point (vertex)';
+          measurementText.value = 'Angle: Click for 2nd point (vertex).';
       } else if (anglePoints.value.length === 2) {
-          const line1 = new fabric.Line([anglePoints.value[0].x, anglePoints.value[0].y, anglePoints.value[1].x, anglePoints.value[1].y], 
-              { stroke: '#ff00ff', strokeWidth: 2 / canvas.value.getZoom(), selectable: false, evented: false });
+          const line1 = new fabric.Line(
+              [anglePoints.value[0].x, anglePoints.value[0].y, anglePoints.value[1].x, anglePoints.value[1].y],
+              { stroke: '#ff00ff', strokeWidth: 2 / canvas.value.getZoom(), selectable: false, evented: false }
+          );
           canvas.value.add(line1);
           angleLines.value.push(line1);
-          measurementText.value = 'Click for 3rd point';
+          measurementText.value = 'Angle: Click for 3rd point to form angle.';
       } else if (anglePoints.value.length === 3) {
-          const line2 = new fabric.Line([anglePoints.value[1].x, anglePoints.value[1].y, anglePoints.value[2].x, anglePoints.value[2].y], 
-              { stroke: '#ff00ff', strokeWidth: 2 / canvas.value.getZoom(), selectable: false, evented: false });
+          const line2 = new fabric.Line(
+              [anglePoints.value[1].x, anglePoints.value[1].y, anglePoints.value[2].x, anglePoints.value[2].y],
+              { stroke: '#ff00ff', strokeWidth: 2 / canvas.value.getZoom(), selectable: false, evented: false }
+          );
           canvas.value.add(line2);
           angleLines.value.push(line2);
-          completeAngleMeasurement(); // Will reset isMeasuringAngle
+          completeAngleMeasurement();
       }
       canvas.value.renderAll();
       return;
     }
 
     if (isMeasuring.value) {
-      startPoint.value = pointer;
-      currentMeasurement.value = new fabric.Line([pointer.x, pointer.y, pointer.x, pointer.y], {
-          stroke: '#ff00ff', strokeWidth: 2 / canvas.value.getZoom(), selectable: false, evented: false
-      });
-      canvas.value.add(currentMeasurement.value);
+      if (!startPoint.value) {
+        startPoint.value = pointer;
+        currentMeasurement.value = new fabric.Line(
+          [pointer.x, pointer.y, pointer.x, pointer.y],
+          { stroke: '#ff00ff', strokeWidth: 2 / canvas.value.getZoom(), selectable: false, evented: false }
+        );
+        canvas.value.add(currentMeasurement.value);
+        measurementText.value = 'Measure: Click to select second point.';
+      } else {
+        currentMeasurement.value.set({ x2: pointer.x, y2: pointer.y });
+        currentMeasurement.value.setCoords();
+        const { pixels, mm } = calculateDistance(startPoint.value, pointer);
+        measurementText.value = `Measured: ${mm} mm (${pixels.toFixed(0)} px)`;
+        endMeasuring();
+      }
       canvas.value.renderAll();
       return;
     }
 
-    // Panning logic (if no tool is active and zoomed in)
-    if (canvas.value.getZoom() !== 1 && !canvas.value.isDrawingMode && !isDrawingPolygon.value && !isMeasuring.value && !isMeasuringAngle.value && !isAddingAsterisk.value) {
+    const noActiveTool = !canvas.value.isDrawingMode && !isDrawingPolygon.value && !isMeasuring.value &&
+                         !isMeasuringAngle.value && !isAddingAsterisk.value && !isDrawingCircle.value &&
+                         !isDrawingTextRect.value && !isDrawingArrow.value && !isDrawingRectangle.value;
+
+    if (canvas.value.getZoom() !== 1 && noActiveTool) {
         if (!options.target || (options.target.type === 'image' && options.target.selectable === false)) {
             isDragging.value = true;
             lastDragPos.value = { x: options.e.clientX, y: options.e.clientY };
@@ -1003,73 +1048,216 @@ onMounted(async () => {
     const handleMouseMove = (options) => {
     const pointer = canvas.value.getPointer(options.e);
 
+    if (isDrawingRectangle.value && rectStartPoint.value && currentRectangle.value) {
+        const x1 = rectStartPoint.value.x;
+        const y1 = rectStartPoint.value.y;
+        const x2 = pointer.x;
+        const y2 = pointer.y;
+
+        currentRectangle.value.set({
+            left: Math.min(x1, x2),
+            top: Math.min(y1, y2),
+            width: Math.abs(x1 - x2),
+            height: Math.abs(y1 - y2),
+        });
+        canvas.value.renderAll();
+    }
+
+
+    if (isDrawingTextRect.value && textRectStartPoint.value && currentTextRect.value) {
+        const x1 = textRectStartPoint.value.x;
+        const y1 = textRectStartPoint.value.y;
+        const x2 = pointer.x;
+        const y2 = pointer.y;
+        currentTextRect.value.set({
+            left: Math.min(x1, x2), top: Math.min(y1, y2),
+            width: Math.abs(x1 - x2), height: Math.abs(y1 - y2),
+        });
+        canvas.value.renderAll();
+    }
+
+    if (isDrawingArrow.value && arrowStartPoint.value) {
+        if (currentArrow.value) {
+            canvas.value.remove(currentArrow.value);
+        }
+        currentArrow.value = createArrowGroup(arrowStartPoint.value.x, arrowStartPoint.value.y, pointer.x, pointer.y, false);
+        if (currentArrow.value) {
+             canvas.value.add(currentArrow.value);
+        }
+        canvas.value.renderAll();
+    }
+
+    if (isDrawingCircle.value && currentCircle.value && startPoint.value) {
+      const radius = Math.sqrt(
+        Math.pow(pointer.x - startPoint.value.x, 2) +
+        Math.pow(pointer.y - startPoint.value.y, 2)
+      );
+      currentCircle.value.set('radius', Math.max(radius, 1 / canvas.value.getZoom()));
+      const { pixels, mm } = calculateDistance({x:0, y:0}, {x:radius, y:0});
+      const areaPx = Math.PI * Math.pow(pixels, 2);
+      const areaMmSq = (areaPx / Math.pow(scaleFactor.value || 100, 2)).toFixed(2);
+      measurementText.value = `Circle Radius: ${mm} mm, Area: ${areaMmSq} mm² (${areaPx.toFixed(0)} px²)`;
+      canvas.value.renderAll();
+    }
+
     if (isDrawingPolygon.value && polygonPoints.value.length > 0) {
-        // Remove previous rubber-band line if it exists
         if (tempLines.value.length > 0 && tempLines.value[tempLines.value.length - 1].temporary) {
             canvas.value.remove(tempLines.value.pop());
         }
-        // Add new rubber-band line
         const lastPolyPoint = polygonPoints.value[polygonPoints.value.length - 1];
         const rubberBandLine = new fabric.Line([lastPolyPoint.x, lastPolyPoint.y, pointer.x, pointer.y], {
-            stroke: '#ffa500', strokeDashArray: [5, 5], strokeWidth: 2 / canvas.value.getZoom(),
-            selectable: false, evented: false, temporary: true, // Custom flag
+            stroke: '#ffa500', strokeDashArray: [5, 5 / canvas.value.getZoom()],
+            strokeWidth: 2 / canvas.value.getZoom(),
+            selectable: false, evented: false, temporary: true,
         });
         canvas.value.add(rubberBandLine);
         tempLines.value.push(rubberBandLine);
         canvas.value.renderAll();
     }
 
-    if (isMeasuring.value && currentMeasurement.value && startPoint.value) {
+    if (isMeasuring.value && startPoint.value && currentMeasurement.value) {
       currentMeasurement.value.set({ x2: pointer.x, y2: pointer.y });
       const { pixels, mm } = calculateDistance(startPoint.value, pointer);
-      measurementText.value = `${mm} mm (${pixels.toFixed(0)} px)`;
+      if (!measurementText.value.startsWith("Angle:")) {
+          measurementText.value = `Measuring: ${mm} mm (${pixels.toFixed(0)} px) - Click to finalize`;
+      }
       canvas.value.renderAll();
     }
 
-    if (isDragging.value) { // Panning
+    if (isDragging.value) {
       const deltaX = options.e.clientX - lastDragPos.value.x;
       const deltaY = options.e.clientY - lastDragPos.value.y;
       canvas.value.relativePan(new fabric.Point(deltaX, deltaY));
       lastDragPos.value = { x: options.e.clientX, y: options.e.clientY };
-      // relativePan renders, so no explicit renderAll here
     }
   };
 
     const handleMouseUp = (options) => {
-    // Finalize drawing/highlighting (objects are added by Fabric automatically)
-    if (canvas.value.isDrawingMode && (isHighlighting.value || (!isHighlighting.value && !isAddingAsterisk.value /* means free draw pencil */) ) ) {
-        canvas.value.isDrawingMode = false;
-        isHighlighting.value = false;
-        showHighlightControls.value = false;
-        measurementText.value = '';
+    const pointer = canvas.value.getPointer(options.e);
+    const pixelsPerMm = scaleFactor.value || 100;
+
+    if (isDrawingRectangle.value && rectStartPoint.value && currentRectangle.value) {
+        const rectWidthPx = currentRectangle.value.width;
+        const rectHeightPx = currentRectangle.value.height;
+
+        if (rectWidthPx > 2 / canvas.value.getZoom() && rectHeightPx > 2 / canvas.value.getZoom()) {
+            currentRectangle.value.set({
+                strokeDashArray: null,
+                selectable: true, evented: true, hasControls: true
+            });
+            canvas.value.setActiveObject(currentRectangle.value);
+
+            const areaPx = rectWidthPx * rectHeightPx;
+            const widthMm = (rectWidthPx / pixelsPerMm).toFixed(2);
+            const heightMm = (rectHeightPx / pixelsPerMm).toFixed(2);
+            const areaMmSq = (areaPx / Math.pow(pixelsPerMm, 2)).toFixed(2);
+            measurementText.value = `Rectangle: ${widthMm}x${heightMm} mm, Area ${areaMmSq} mm² (${areaPx.toFixed(0)} px²)`;
+        } else {
+            canvas.value.remove(currentRectangle.value);
+            measurementText.value = 'Rectangle too small, removed.';
+        }
+        isDrawingRectangle.value = false;
+        currentRectangle.value = null;
+        rectStartPoint.value = null;
         canvas.value.defaultCursor = canvas.value.getZoom() !== 1 ? 'move' : 'default';
+        canvas.value.renderAll();
+        return;
     }
 
-    if (isMeasuring.value && currentMeasurement.value) {
-      endMeasuring(); // Finalizes the measurement line and resets state
-      // currentMeasurement.value is not set to null in endMeasuring to keep the line visible
-      // No renderAll needed here if endMeasuring handles it or if mousemove was last render
+
+    if (isDrawingTextRect.value && textRectStartPoint.value && currentTextRect.value) {
+        canvas.value.remove(currentTextRect.value);
+        const rectWidth = Math.abs(textRectStartPoint.value.x - pointer.x);
+        const rectHeight = Math.abs(textRectStartPoint.value.y - pointer.y);
+
+        if (rectWidth > 5 / canvas.value.getZoom() && rectHeight > 5 / canvas.value.getZoom()) {
+            const textContent = selectedDisease.value || 'Double-click to edit';
+            const iText = new fabric.IText(textContent, {
+                left: Math.min(textRectStartPoint.value.x, pointer.x),
+                top: Math.min(textRectStartPoint.value.y, pointer.y),
+                width: rectWidth,
+                fontSize: Math.max(8 / canvas.value.getZoom(), Math.min(16 / canvas.value.getZoom(), rectHeight * 0.6)),
+                fill: '#ff0000', backgroundColor: 'rgba(255,255,255,0.7)',
+                padding: 2 / canvas.value.getZoom(),
+                hasControls: true, selectable: true,
+            });
+            canvas.value.add(iText);
+            canvas.value.setActiveObject(iText);
+            iText.enterEditing();
+            selectedDisease.value = '';
+        }
+        isDrawingTextRect.value = false;
+        currentTextRect.value = null;
+        textRectStartPoint.value = null;
+        measurementText.value = 'Text tool. Click Add Text to draw another.';
+        canvas.value.defaultCursor = canvas.value.getZoom() !== 1 ? 'move' : 'default';
+        canvas.value.renderAll();
+        return;
     }
 
-    if (isDragging.value) { // Panning ended
+    if (isDrawingArrow.value && arrowStartPoint.value) {
+        if (currentArrow.value) {
+            canvas.value.remove(currentArrow.value);
+        }
+        const finalArrow = createArrowGroup(arrowStartPoint.value.x, arrowStartPoint.value.y, pointer.x, pointer.y, true);
+        if (finalArrow) {
+             canvas.value.add(finalArrow);
+             canvas.value.setActiveObject(finalArrow);
+        }
+        isDrawingArrow.value = false;
+        currentArrow.value = null;
+        arrowStartPoint.value = null;
+        measurementText.value = 'Arrow tool. Click Add Arrow to draw another.';
+        canvas.value.defaultCursor = canvas.value.getZoom() !== 1 ? 'move' : 'default';
+        canvas.value.renderAll();
+        return;
+    }
+
+    if (isDrawingCircle.value && currentCircle.value) {
+      const radiusPx = currentCircle.value.radius;
+      if (radiusPx > (2 / canvas.value.getZoom())) {
+          currentCircle.value.set({ selectable: true, evented: true, hasControls: true });
+          canvas.value.setActiveObject(currentCircle.value);
+
+          const areaPx = Math.PI * Math.pow(radiusPx, 2);
+          const radiusMm = (radiusPx / pixelsPerMm).toFixed(2);
+          const areaMmSq = (areaPx / Math.pow(pixelsPerMm, 2)).toFixed(2);
+          measurementText.value = `Circle: Radius ${radiusMm} mm, Area ${areaMmSq} mm² (${areaPx.toFixed(0)} px²)`;
+      } else {
+          canvas.value.remove(currentCircle.value);
+          measurementText.value = 'Circle too small, removed.';
+      }
+      isDrawingCircle.value = false;
+      // currentCircle.value = null; // Keep ref for active object
+      startPoint.value = null;
+      canvas.value.defaultCursor = canvas.value.getZoom() !== 1 ? 'move' : 'default';
+      canvas.value.renderAll();
+      return;
+    }
+
+    if (isDragging.value) {
       isDragging.value = false;
       canvas.value.defaultCursor = canvas.value.getZoom() !== 1 ? 'move' : 'default';
     }
-    // For polygon and angle, completion is handled by dblclick or 3rd click respectively.
   };
 
   const handleDoubleClick = (options) => {
     if (isDrawingPolygon.value) {
-      completePolygon(); // Finishes polygon and resets state
+      completePolygon();
+    }
+    const target = options.target;
+    if (target && target.type === 'i-text' && !target.isEditing) {
+        target.enterEditing();
+        canvas.value.setActiveObject(target);
     }
   };
 
     const uploadImage = async () => {
       if (!canvas.value || canvas.value.isEmpty()) {
-        alert('Canvas is empty'); return;
+        alert('Canvas is empty. Add an image and annotations first.'); return;
       }
       if (!selectedDisease.value) {
-        alert('Please select a disease type'); return;
+        alert('Please select a disease type before uploading.'); return;
       }
       isUploading.value = true;
       uploadError.value = '';
@@ -1081,7 +1269,7 @@ onMounted(async () => {
         canvas.value.renderAll();
 
         const dataUrl = canvas.value.toDataURL({ format: 'png', quality: 1.0 });
-        
+
         canvas.value.setViewportTransform(vpt);
         canvas.value.setZoom(currentZoom);
         canvas.value.renderAll();
@@ -1094,13 +1282,13 @@ onMounted(async () => {
         const blob = new Blob([bytes], { type: 'image/png' });
         const file = new File([blob], `edited-image-${new Date().toISOString().split('T')[0]}.png`, { type: 'image/png' });
         const diseaseType = diseaseToTypeMap[selectedDisease.value] || 'OTHER';
-        
+
         await EditedImageService.uploadFile(file, diseaseType);
         measurementText.value = 'Image uploaded successfully!';
-        selectedDisease.value = ''; 
+        selectedDisease.value = '';
       } catch (err) {
-        uploadError.value = err.response?.data?.detail || 'Failed to upload image';
-        measurementText.value = uploadError.value;
+        uploadError.value = err.response?.data?.detail || 'Failed to upload image. Please try again.';
+        measurementText.value = `Error: ${uploadError.value}`;
         console.error("Upload error:", err);
       } finally {
         isUploading.value = false;
@@ -1108,27 +1296,25 @@ onMounted(async () => {
     };
 
     const clearCanvas = () => {
-      if (confirm('Are you sure you want to clear the canvas?')) {
-        canvas.value.clear(); // Removes all objects
+      if (confirm('Are you sure you want to clear all annotations and the current image?')) {
+        resetAllTools();
+        canvas.value.clear();
         canvas.value.setBackgroundColor('#f0f0f0', canvas.value.renderAll.bind(canvas.value));
-        
-        if (imageUrl.value) { // Reload the base image if one was set
-            loadImage(); // This will also call resetZoom and renderAll
+
+        if (imageUrl.value) {
+            loadImage();
         } else {
-            resetZoom(); // If no base image, just reset zoom and tools
+            resetZoom();
+            canvas.value.setDimensions({ width: 800, height: originalCanvasHeight });
         }
 
-        // Reset states that loadImage or resetZoom might not cover fully if no image loaded
         brightnessLevel.value = 0;
         contrastLevel.value = 0;
         if(canvasContainer.value) canvasContainer.value.style.filter = 'brightness(1) contrast(1)';
         showBrightnessSlider.value = false;
         showContrastSlider.value = false;
-        edgeImage.value = null;
         rotationAngle.value = 0;
-        selectedDisease.value = ''; // Also clear selected disease
-        // Most other tool-specific states are reset by resetAllTools called from resetZoom
-        canvas.value.setDimensions({ width: 800, height: originalCanvasHeight }); // Ensure original dimensions
+        selectedDisease.value = '';
       }
     };
 
@@ -1139,9 +1325,9 @@ onMounted(async () => {
       showHighlightControls, highlightColor, highlightThickness, updateHighlightBrush,
       toggleBrightnessSlider, toggleContrastSlider, updateFilters,
       brightnessLevel, showBrightnessSlider, contrastLevel, showContrastSlider,
-      startMeasuring, endMeasuring, // endMeasuring implicitly used by mouseup
+      startMeasuring,
       zoomIn, zoomOut, resetZoom,
-      rotateImage, sharpenImage, smoothImage, applyEdgeDetection,
+      rotateImage, sharpenImage, smoothImage,
       uploadImage, clearCanvas,
       isUploading, uploadError,
     };
@@ -1353,13 +1539,11 @@ select {
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-/* Add focus styles for better accessibility */
 button:focus {
   outline: none;
   box-shadow: 0 0 0 3px rgba(66, 185, 131, 0.2);
 }
 
-/* Add loading state styles */
 button:disabled {
   opacity: 0.7;
   cursor: not-allowed;
@@ -1368,23 +1552,45 @@ button:disabled {
 }
 
 .highlight-controls {
-  padding: 0.75rem;
+  display: flex;
+  flex-direction: column;
   gap: 0.75rem;
+  padding: 0.75rem;
+  margin-top: 0.75rem;
+  border: 1px solid #e0e0e0;
   border-radius: 6px;
+  background-color: #f9f9f9;
+}
+
+.highlight-controls div {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
 }
 
 .highlight-controls label {
   font-size: 0.9rem;
+  min-width: 70px;
 }
 
 .highlight-controls input[type='color'] {
-  width: 40px;
+  width: 32px;
   height: 32px;
+  padding: 0;
+  border: 1px solid #ccc;
+  border-radius: 4px;
 }
 
 .highlight-controls input[type='range'] {
-  width: 120px;
+  flex-grow: 1;
+  max-width: 120px;
 }
+
+.highlight-controls span {
+  font-size: 0.85rem;
+  min-width: 30px;
+}
+
 
 .canvas-container {
   position: relative;
@@ -1406,18 +1612,42 @@ button:disabled {
   padding: 0.5rem 0.75rem;
   font-size: 0.9rem;
   border-radius: 6px;
+  background-color: rgba(44, 62, 80, 0.05);
+  color: #2c3e50;
+  border: 1px solid #e9ecef;
+  margin-top: 0.5rem;
+  text-align: center;
 }
+
 
 .brightness-slider,
 .contrast-slider {
   width: 160px;
+  display: block;
+  margin: 0.5rem auto;
 }
 
 .brightness-slider::-webkit-slider-thumb,
 .contrast-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
   width: 20px;
   height: 20px;
+  background: #42b983;
+  cursor: pointer;
+  border-radius: 50%;
 }
+
+.brightness-slider::-moz-range-thumb,
+.contrast-slider::-moz-range-thumb {
+  width: 20px;
+  height: 20px;
+  background: #42b983;
+  cursor: pointer;
+  border-radius: 50%;
+  border: none;
+}
+
 
 @media (max-width: 1024px) {
   .editor-main {
@@ -1427,6 +1657,7 @@ button:disabled {
   .controls {
     width: 100%;
     max-height: none;
+    overflow-y: visible;
   }
 
   .canvas-container {

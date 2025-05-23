@@ -1,4 +1,6 @@
 /** @type {import('tailwindcss').Config} */
+import { viteCommonjs } from '@originjs/vite-plugin-commonjs';
+
 export default {
     content: [
       "./index.html",
@@ -7,5 +9,12 @@ export default {
     theme: {
       extend: {},
     },
-    plugins: [],
+      optimizeDeps: {
+    exclude: ['@cornerstonejs/dicom-image-loader'],
+    include: ['dicom-parser'],
+  },
+    plugins: [
+          viteCommonjs(),
+
+    ],
   }

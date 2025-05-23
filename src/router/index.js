@@ -10,6 +10,7 @@ import NotAllowed from "@/views/DontAllow.vue"
 import AssignFIle from '@/views/AssignFIle.vue'
 import AssignedFiles from '@/views/AssignedFiles.vue'
 import Landing from '@/views/Landing.vue'
+import CornerViewer from '@/views/CornerViewer.vue'
 
 const routes = [
   {
@@ -102,7 +103,8 @@ const routes = [
   {
     path: '/canvas_editor/:id',
     name: 'CanvasEditor',
-    component: CanvasEditor,
+    // component: CanvasEditor,
+    component: CornerViewer,
     meta: { 
       requiresAuth: true,
       allowedGroups: [ 'admins', 'specialist'],

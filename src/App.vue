@@ -19,13 +19,14 @@
               <template v-if="userGroups.includes('specialist')">
                 <router-link to="/assigned" class="nav-link">Assigned Files</router-link>
               </template>
+              <template v-if="userGroups.includes('clients')">
+                <router-link to="/files" class="nav-link">Files</router-link>
+                <router-link to="/file_list" class="nav-link">File List</router-link>
+              </template>
             </template>
 
             <!-- Links for clients -->
-            <template v-if="userGroups.includes('clients')">
-              <router-link to="/files" class="nav-link">Files</router-link>
-              <router-link to="/file_list" class="nav-link">File List</router-link>
-            </template>
+
 
             <a href="#" @click.prevent="logout" class="nav-link">Logout</a>
           </template>
